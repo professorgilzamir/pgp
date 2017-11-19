@@ -1,5 +1,5 @@
 SHELL = /bin/sh
-PLAT = macosx
+PLAT = linux
 
 all:
 	make -f Makefile.$(PLAT)

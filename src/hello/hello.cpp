@@ -2,9 +2,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 /* Usando o GLUT com gerenciador de janelas */
-#include <OpenGL/gl3.h>
-#define __gl_h_
+
+#ifdef __APPLE__
 #include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+
+
+
 
 /* COLOCAREMOS AS VARIAVEIS GLOBAIS AQUI MAIS TARDE */
 
@@ -30,7 +36,7 @@ int main(int argc, char* argv[])
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_RGBA|GLUT_DOUBLE|GLUT_DEPTH);
   glutInitWindowSize(640, 480);
-  glutCreateWindow("Meu Primeiro Triângulo");
+  glutCreateWindow("Meu Primeiro Triangulo");
 
 
   /* Quando as funções de inicialização são executadas sem erros,
