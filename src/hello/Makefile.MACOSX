@@ -17,7 +17,8 @@ install: $(BIN)
 	mv $(BIN) $(BINDIR)
 
 clean:
-	$(RM) $(OBJS)
+	$(RM) $(OBJS);\
+	$(RM) $(BIN);
 
 distclean: clean
 	$(RM) $(BINDIR)/$(BIN)

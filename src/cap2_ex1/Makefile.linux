@@ -1,12 +1,12 @@
 CXX=g++
 RM=rm -f
-LIBS = -lglut -lGL
+LIBS = -lglut -lGL -lGLEW
 CXXFLAGS=
 BINDIR=../../bin
 
-SRCS=hello.cpp
+SRCS=ex1.cpp
 OBJS=$(subst .cpp,.o,$(SRCS))
-BIN = hello
+BIN = ex1
 
 all: $(BIN)
 
@@ -22,4 +22,5 @@ clean:
 
 distclean: clean
 	$(RM) $(BINDIR)/$(BIN)
+
 
