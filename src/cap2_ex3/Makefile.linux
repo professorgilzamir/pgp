@@ -1,7 +1,7 @@
 CXX=g++
 RM=rm -f
 LIBS = -lglut -lGL -lGLEW
-CXXFLAGS=
+CXXFLAGS=-Wall -g
 BINDIR=../../bin
 
 SRCS=ex3.cpp

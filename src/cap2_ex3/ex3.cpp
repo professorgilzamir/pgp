@@ -10,7 +10,7 @@
 #include <GLUT/glut.h>
 #else
 #include <GL/glew.h>
-#include <GL/glut.h>
+#include <GL/freeglut.h>
 #endif
 
 #include "shader.h"
@@ -76,6 +76,7 @@ void atualizarDesenho()
 void finalizar()
 {
 	delete shader;
+	shader = 0;
 }
 
 void fecharJanela() {

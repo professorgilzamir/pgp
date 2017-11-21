@@ -44,11 +44,8 @@ class Attribute {
 	GLsizei vertexSize;
 	GLint vertexComponentType;
 	GLuint bufferId;
-	
-	
 public:
 	Attribute() {
-		this->name = string();
 		this->vertexSize = 0;
 		this->vertexComponentType = -1;
 	}
@@ -110,9 +107,6 @@ public:
 	bool operator ==(const Attribute &attr){
 		return this->name == this->name;
 	} 
-	
-	~Attribute() {
-	}
 };
 
 class Shader {
@@ -209,7 +203,7 @@ public:
 	}
 	
 	void disableAttribute(string name) {
-		glDisableVertexAttribArray(getAttribute("coord2d").getLocation());
+		glDisableVertexAttribArray(getAttribute(name).getLocation());
 	}
 	
 	string getShaderLog(GLuint object) {
@@ -230,11 +224,13 @@ public:
     		glGetProgramInfoLog(object, log_length, NULL, log);
     	
     	
-    	slog.append(log);
-    	
-    	free(log);
-    	
-    	return slog;
+    		slog.append(log);
+
+		free(log);
+
+		log = NULL;
+	
+    		return slog;
 	}
 	
 	Uniform getUniform(string name){
@@ -354,13 +350,6 @@ public:
 
 
 	~Shader() {
-		glDeleteProgram(program);
-		for (map<string, Attribute>::iterator it = attributes.begin();
-			it != attributes.end(); ++it) {
-			
-			Attribute attr = it->second;
-			GLuint id = attr.getBufferId();
-			glDeleteBuffers(1, &id);
-		} 
 	}
 };
+
