@@ -350,6 +350,14 @@ public:
 
 
 	~Shader() {
+		for (map<string, Attribute>::iterator it = attributes.begin();
+			it != attributes.end(); ++it) {
+			
+			Attribute attr = it->second;
+			GLuint id = attr.getBufferId();
+			glDeleteBuffers(1, &id);
+		}
+		glDeleteProgram(program);
 	}
 };
 
