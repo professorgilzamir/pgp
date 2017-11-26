@@ -10,7 +10,7 @@
 #include <GLUT/glut.h>
 #else
 #include <GL/glew.h>
-#include <GL/glut.h>
+#include <GL/freeglut.h>
 #endif
 
 using namespace std;

@@ -186,7 +186,7 @@ public:
 	}
 
 
-	void deleteDynamic(){
+	virtual void deleteDynamic(){
 		if (vertices != NULL) {
 			delete [] vertices;
 			vertices = NULL;
@@ -208,23 +208,12 @@ public:
 		}
 	}
 
-	~GraphicObject(){
+	virtual ~GraphicObject(){
 		shader = NULL;
-		if (vertices != NULL) {
-			vertices = NULL;
-		}
-
-		if (indices != NULL) {
-			indices = NULL;
-		}
-
-		if (colors != NULL) {
-			colors = NULL;
-		}
-
-		if (normals != NULL) {
-			normals = NULL;
-		}
+		vertices = NULL;
+		indices = NULL;
+		colors = NULL;
+		normals = NULL;
 	}
 };
 

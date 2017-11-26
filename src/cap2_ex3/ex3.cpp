@@ -75,8 +75,10 @@ void atualizarDesenho()
 
 void finalizar()
 {
-	delete shader;
-	shader = 0;
+	if (shader != NULL) {
+		delete shader;
+		shader = NULL;
+	}
 }
 
 void fecharJanela() {

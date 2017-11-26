@@ -78,9 +78,16 @@ void atualizarDesenho()
 
 void finalizar()
 {
-	delete shader;
-	delete triangle;
-	shader = 0;
+
+	if (triangle != NULL) {
+		delete triangle;
+		triangle = NULL;	
+	}
+
+	if (shader != NULL) {
+		delete shader;
+		shader = NULL;
+	}
 }
 
 void fecharJanela() {

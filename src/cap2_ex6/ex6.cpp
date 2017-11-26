@@ -91,26 +91,32 @@ int inicializar(void)
 
 void atualizarDesenho()
 {
-	scene.draw();
-	glutSwapBuffers();
+	if (shader != NULL) {
+		scene.draw();
+		glutSwapBuffers();
+	}
 }
 
 void finalizar()
 {
-	delete shader;
-	for (int i = 0; i < NCIRCLES; i++) {
-		circle[i]->deleteDynamic();
-		delete circle[i];
-		circle[i] = NULL;
+	if (circle != NULL) {
+		for (int i = 0; i < NCIRCLES; i++) {
+			circle[i]->deleteDynamic();
+			delete circle[i];
+		}
+		delete [] circle;
+		circle = NULL;
 	}
-	delete [] circle;
-	circle = NULL;
-	shader = NULL;
+		
+	if (shader != NULL) {
+		delete shader;
+		shader = NULL;
+	}
 }
 
 void fecharJanela() {
-	glutDestroyWindow(mainwindow);
 	finalizar();
+	glutDestroyWindow(mainwindow);
 	exit(0);
 }
 
