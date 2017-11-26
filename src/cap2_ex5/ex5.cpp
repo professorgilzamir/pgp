@@ -14,15 +14,28 @@
 #endif
 
 #include "shader.hpp"
+#include "object.hpp"
 
 using namespace std;
 
 Shader *shader;
+GraphicObject *triangle;
+Scene scene;
 
 GLfloat triangle_vertices[] = {
 	0.0, 0.8,
 	-0.8, -0.8,
 	0.8, -0.8
+};
+
+GLfloat triangle_colors[] = {
+	1.0f, 0.0f, 1.0f, 1.0f,
+	1.0f, 0.0f, 0.0f, 1.0f,
+	1.0f, 0.0f, 0.0f, 1.0f
+};
+
+GLuint indices[] = {
+	0, 1, 2
 };
 
 int mainwindow=-1;
@@ -49,12 +62,11 @@ int inicializar(void)
 	string fs = readfile("shader.fs");
 	try{
 		shader = new Shader(vs, fs);
-		shader->setAttribute(Attribute("coord2d"));
-		shader->setUniform(Uniform("color"));
-		shader->init();
-		glUseProgram(shader->getProgramID());
-		shader->setAttributeData("coord2d", triangle_vertices, sizeof(triangle_vertices));
-		shader->bindUData3f("color", 1.0f, 1.0f, 0.0f);
+		triangle = new GraphicObject(shader,  triangle_vertices, 3, triangle_colors, indices, 3);
+		triangle->verticesAttribute = Attribute("coord2d");
+		triangle->colorAttribute = Attribute("colors", 4);
+		triangle->initShader();
+		scene.objects.push_back( triangle );
 		return 1;
 	} catch(string e) {
 		cout<<e<<endl;
@@ -64,18 +76,14 @@ int inicializar(void)
 
 void atualizarDesenho()
 {
-	glClearColor(1.0, 1.0, 1.0, 1.0);
-	glClear(GL_COLOR_BUFFER_BIT);
-	glUseProgram(shader->getProgramID());
-	shader->enableAttribute("coord2d");
-	glDrawArrays(GL_TRIANGLES, 0, 3);
-	shader->disableAttribute("coord2d");
+	scene.draw();
 	glutSwapBuffers();
 }
 
 void finalizar()
 {
 	delete shader;
+	delete triangle;
 	shader = 0;
 }
 

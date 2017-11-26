@@ -14,18 +14,21 @@
 #endif
 
 #include "shader.hpp"
+#include "object.hpp"
+#include <cmath>
 
 using namespace std;
 
 Shader *shader;
+GraphicObject **circle;
+Scene scene;
+GLuint w = 400;
+GLuint h = 400;
 
-GLfloat triangle_vertices[] = {
-	0.0, 0.8,
-	-0.8, -0.8,
-	0.8, -0.8
-};
 
 int mainwindow=-1;
+GLsizei NCIRCLES = 1;
+GLsizei CIRCLE_SIZE = 3;
 
 string readfile(const char *name){
 	ifstream source(name);
@@ -42,6 +45,27 @@ string readfile(const char *name){
 	return content;
 }
 
+GraphicObject* newCircle(GLsizei N, GLfloat x, GLfloat y, GLfloat r) {
+	GLfloat t = 0.0f;
+	GLsizei n = N*2;
+	GLsizei nc = N*4;
+	GLfloat deltat = (2.0f * M_PI)/N; 
+	GLfloat *vertices = new GLfloat[n];
+	GLfloat *colors = new GLfloat[nc];
+	GLsizei c = 0;
+	GLsizei  v = 0;
+	for (int i = 0; i < N; i++) {
+		vertices[v] = x + r*cos(t);
+		vertices[v+1] = y + r*sin(t);
+		t = t + deltat;
+		colors[c] = 1.0f; colors[c+1] = 0.0f; colors[c+2] = 0.0f; colors[c+3] = 1.0;
+		c += 4;
+		v += 2;
+	}
+	return new GraphicObject(shader, vertices, N, colors);
+}
+
+
 /* COLOCAREMOS AS VARIAVEIS GLOBAIS AQUI MAIS TARDE */
 int inicializar(void)
 {
@@ -49,12 +73,15 @@ int inicializar(void)
 	string fs = readfile("shader.fs");
 	try{
 		shader = new Shader(vs, fs);
-		shader->setAttribute(Attribute("coord2d"));
-		shader->setUniform(Uniform("color"));
-		shader->init();
-		glUseProgram(shader->getProgramID());
-		shader->setAttributeData("coord2d", triangle_vertices, sizeof(triangle_vertices));
-		shader->bindUData3f("color", 1.0f, 1.0f, 0.0f);
+		circle = new GraphicObject*[NCIRCLES];
+		for (int i = 0; i < NCIRCLES; i++) {
+			circle[i] = newCircle(CIRCLE_SIZE+i, 0.0f, 0.0f, 1.0);
+			circle[i]->primitive = GL_LINE_LOOP;
+			circle[i]->verticesAttribute = Attribute("coord2d");
+			circle[i]->colorAttribute = Attribute("colors", 4);
+			circle[i]->initShader();
+			scene.objects.push_back( circle[i] );
+		}
 		return 1;
 	} catch(string e) {
 		cout<<e<<endl;
@@ -64,19 +91,21 @@ int inicializar(void)
 
 void atualizarDesenho()
 {
-	glClearColor(1.0, 1.0, 1.0, 1.0);
-	glClear(GL_COLOR_BUFFER_BIT);
-	glUseProgram(shader->getProgramID());
-	shader->enableAttribute("coord2d");
-	glDrawArrays(GL_TRIANGLES, 0, 3);
-	shader->disableAttribute("coord2d");
+	scene.draw();
 	glutSwapBuffers();
 }
 
 void finalizar()
 {
 	delete shader;
-	shader = 0;
+	for (int i = 0; i < NCIRCLES; i++) {
+		circle[i]->deleteDynamic();
+		delete circle[i];
+		circle[i] = NULL;
+	}
+	delete [] circle;
+	circle = NULL;
+	shader = NULL;
 }
 
 void fecharJanela() {
@@ -87,12 +116,22 @@ void fecharJanela() {
 
 int main(int argc, char* argv[])
 {
+
+
+  if (argc > 1) {
+  	NCIRCLES = stoi(argv[1]);
+  }
+
+  if (argc > 2) {
+  	CIRCLE_SIZE = stoi(argv[2]);
+  }
+
   /* Funções necessárias para iniciar a GLUT */
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_RGBA|GLUT_DOUBLE|GLUT_DEPTH);
-  glutInitWindowSize(640, 480);
+  glutInitWindowSize(w, h);
   mainwindow = glutCreateWindow("Meu Primeiro Triangulo");
-
+  glViewport(0, 0, w, h);
   const char* ver = (const char*)glGetString(GL_VERSION);
   char major_number = ver[0];
   if (major_number < '2'){
