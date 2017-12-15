@@ -9,7 +9,7 @@
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #else
-#include <GL/glew.h>
+#include "GL/glew.h"
 #include <GL/freeglut.h>
 #endif
 
@@ -123,15 +123,17 @@ void fecharJanela() {
 int main(int argc, char* argv[])
 {
 
-
+	/*
   if (argc > 1) {
   	NCIRCLES = stoi(argv[1]);
   }
 
   if (argc > 2) {
   	CIRCLE_SIZE = stoi(argv[2]);
-  }
+  }*/
 
+  NCIRCLES = 100;
+  CIRCLE_SIZE = 1;
   /* Funções necessárias para iniciar a GLUT */
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_RGBA|GLUT_DOUBLE|GLUT_DEPTH);
