@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <string>
+#include <cmath>
 /* Usando o GLUT com gerenciador de janelas */
 
 #ifdef __APPLE__
@@ -20,9 +21,26 @@ GLfloat triangle_vertices[] = {
 	0.8, -0.8
 };
 
+GLfloat transformacao[] = { 
+	1.0, 0.0,
+	0.0, 1.0
+};
+
 GLuint program;
 GLint attribute_coord2d;
+GLint uniform_transformacao;
+GLfloat alfa = 0.0f;
 
+void atualizarDesenho();
+
+void onMouseClick(GLint buttom, GLint state, GLint x, GLint y){
+	alfa += 0.1;
+	transformacao[0] = cos(alfa);
+	transformacao[1] = -sin(alfa);
+	transformacao[2] = sin(alfa);
+	transformacao[3] = cos(alfa);
+	atualizarDesenho();
+}
 
 string* readfile(const char *name){
 	ifstream source(name);
@@ -96,6 +114,10 @@ int inicializar(void)
 		return 0;
 	}
 
+
+	uniform_transformacao = 
+			glGetUniformLocation(program, "transformacao");
+
 	return 1;
 }
 
@@ -104,6 +126,9 @@ void atualizarDesenho()
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glUseProgram(program);
+
+	glUniformMatrix2fv(uniform_transformacao, 1, GL_FALSE, transformacao);
+
 	glEnableVertexAttribArray(attribute_coord2d);
 	glVertexAttribPointer(attribute_coord2d,
 				2,
@@ -147,6 +172,7 @@ int main(int argc, char* argv[])
   {
     /* Pode então mostrar se tudo correr bem */
     glutDisplayFunc(atualizarDesenho);
+    glutMouseFunc(onMouseClick);
     glutMainLoop();
   }
 

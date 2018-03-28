@@ -1,4 +1,4 @@
-/* Usando o padrão de saída fprintf */
+	/* Usando o padrão de saída fprintf */
 #include <cstdio>
 #include <cstdlib>
 #include <fstream>
