@@ -6,6 +6,8 @@
 #include <iostream>
 /* Usando o GLUT com gerenciador de janelas */
 
+#include "matrixmath.hpp"
+
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #else
@@ -15,17 +17,52 @@
 
 using namespace std;
 
-GLfloat triangle_vertices[] = {
-	0.0, 0.8,
-	-0.8, -0.8,
-	0.8, -0.8
+GLfloat cube_vertices[] = {
+	 1, -1,   1, //0
+	 1,  1,   1, //1
+	-1,  1,   1, //2
+	-1, -1,   1, //3
+	 1, -1,  -1, //4
+	 1,  1,  -1, //5
+	-1,  1,  -1, //6
+	-1, -1,  -1, //7
 };
 
-GLuint trinagle_indices[] = {0, 1, 2};
+GLuint cube_indices[] = {
+		0, 1, 2, 3, //Face Fontal
+		4, 5, 6, 7, //Face Traseira
+		1, 6, 5, 2, //Face de Cima
+		1, 3, 4, 7, //Face de Baixo
+		2, 5, 4, 3, //Face da Esquerda
+		0, 7, 6, 1, //Face da Direita 
+};
+
+GLfloat rotx45[] = {
+	1, 0, 0, 0,
+	0, 0.7f, -0.7f, 0.0f,
+	0, 0.7f,  0.7f, 0.0f,
+	0, 0.0f, 0.0f, 1.0f
+};
+
+GLfloat scale[] = {
+	0.5f, 0, 0, 0,
+	0, 0.5f, 0, 0,
+	0, 0, 0.5f, 0,
+	0, 0, 0, 1
+};
+
+
+GLfloat model[] = {
+	1, 0, 0, 0,
+	0, 1, 0, 0,
+	0, 0, 1, 0,
+	0, 0, 0, 1
+};
 
 
 GLuint program;
-GLint attribute_coord2d;
+GLint attribute_coord3d;
+GLint uniform_model;
 int mainwindow=-1;
 GLuint vabID=0;
 GLuint eabID=0;
@@ -96,35 +133,45 @@ int inicializar(void)
 
 	glGenBuffers(1, &vabID);
 	glBindBuffer(GL_ARRAY_BUFFER, vabID);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(triangle_vertices), triangle_vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertices), cube_vertices, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	glGenBuffers(1, &eabID);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eabID);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3 * sizeof(trinagle_indices), trinagle_indices, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3 * sizeof(cube_indices), cube_indices, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 
-	const char *attribute_name = "coord2d";
-	attribute_coord2d = glGetAttribLocation(program, attribute_name);
-	if (attribute_coord2d == -1) {
+	const char *attribute_name = "coord3d";
+	attribute_coord3d = glGetAttribLocation(program, attribute_name);
+	if (attribute_coord3d == -1) {
 		fprintf(stderr, "Could not bind attribute %s\n", attribute_name);
 		return 0;
 	}
+
+
+	const char *uniform_model_name = "model";
+	uniform_model = glGetUniformLocation(program, uniform_model_name);
+
+	multMatrix4(scale, rotx45, model);
 
 	return 1;
 }
 
 void atualizarDesenho()
 {
+
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glUseProgram(program);
 	
+
+	glUniformMatrix4fv(uniform_model, 1, GL_FALSE, model);
+
 	glBindBuffer(GL_ARRAY_BUFFER, vabID);
-	glEnableVertexAttribArray(attribute_coord2d);
-	glVertexAttribPointer(attribute_coord2d,
-				2,
+	glEnableVertexAttribArray(attribute_coord3d);
+	glVertexAttribPointer(attribute_coord3d,
+				3,
 				GL_FLOAT,
 				GL_FALSE,
 				0,
@@ -138,13 +185,13 @@ void atualizarDesenho()
 	//glDrawArrays(GL_LINE_LOOP, 0, 3);
 
 	 glDrawElements(
-     	GL_LINE_LOOP,      // mode
-     	3,    // count
+     	GL_QUADS,      // mode
+     	24,    // count
      	GL_UNSIGNED_INT,   // type
     	 (void*)0           // element array buffer offset
 	 );
 
-	glDisableVertexAttribArray(attribute_coord2d);
+	glDisableVertexAttribArray(attribute_coord3d);
 	glutSwapBuffers();
 }
 
@@ -165,7 +212,7 @@ int main(int argc, char* argv[])
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_RGBA|GLUT_DOUBLE|GLUT_DEPTH);
   glutInitWindowSize(640, 480);
-  mainwindow = glutCreateWindow("Meu Primeiro Triangulo");
+  mainwindow = glutCreateWindow("Meu Primeiro Cubo Minha Vida");
 
   const char* ver = (const char*)glGetString(GL_VERSION);
   char major_number = ver[0];
