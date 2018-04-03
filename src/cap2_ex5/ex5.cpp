@@ -86,7 +86,7 @@ void initializeMatrix() {
 
 void updateMatrix() {
 	identity(matrix);
-	rotationZMatrix4(rotx45, rot);
+	rotationXMatrix4(rotx45, rot);
 	multMatrix4(matrix, proj, matrix);
 	multMatrix4(matrix, translation, matrix);
 	multMatrix4(matrix, scale, matrix);
