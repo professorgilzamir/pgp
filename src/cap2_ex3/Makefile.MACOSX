@@ -6,7 +6,7 @@ BINDIR=../../bin
 
 SRCS=ex3.cpp
 OBJS=$(subst .cpp,.o,$(SRCS))
-BIN = ex3 
+BIN = ex3
 
 all: $(BIN)
 

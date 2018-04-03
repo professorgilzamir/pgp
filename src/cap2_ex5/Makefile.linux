@@ -12,7 +12,7 @@ BIN = ex5
 all: $(BIN)
 
 $(BIN): $(OBJS)
-	$(CXX)  -o $(BIN) $(OBJS) $(INCDIRS) $(LIBS) $(CXXFLAGS) libGLEW.a
+	$(CXX)  -o $(BIN) $(OBJS) $(LIBS) $(CXXFLAGS) libGLEW.a
 
 install: $(BIN)
 	mv $(BIN) $(BINDIR)/$(BIN)
