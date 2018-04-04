@@ -18,20 +18,21 @@
 #endif
 
 using namespace std;
+using namespace matrixmath;
 
-GLfloat fov = 45.0 * M_PI/180.0f;
+GLfloat fov = 45.0 * TO_RADIANS;
 GLfloat rot = 0.0f;
-GLfloat rotInc = 10 * M_PI/180.0f;
-GLfloat k = 1.0f;
+GLfloat rotInc = 11.0f;
+
 GLfloat cube_vertices[] = {
-	 1 * k, -1 * k,   1 * k, //0
-	 1 * k,  1 * k,   1 * k, //1
-	-1 * k,  1 * k,   1 * k, //2
-	-1 * k, -1 * k,   1 * k, //3
-	-1 * k, -1 * k,  -1 * k, //4
-	-1 * k,  1 * k,  -1 * k, //5
-	 1 * k,  1 * k,  -1 * k, //6
-	 1 * k, -1 * k,  -1 * k, //7
+	 1, -1,   1, //0
+	 1,  1,   1, //1
+	-1,  1,   1, //2
+	-1, -1,   1, //3
+	-1, -1,  -1, //4
+	-1,  1,  -1, //5
+	 1,  1,  -1, //6
+	 1, -1,  -1, //7
 };
 
 GLfloat cube_colors[] = {
@@ -55,39 +56,15 @@ GLuint cube_indices[] = {
 };
 
 
+GLfloat scale[16];
 
-GLfloat scale[] = {
-	1, 0, 0, 0,
-	0, 1, 0, 0,
-	0, 0, 1, 0,
-	0, 0, 0, 1
-};
+GLfloat translation[16];
 
-GLfloat translation[] = {
-	1, 0, 0, 0,
-	0, 1, 0, 0,
-	0, 0, 1, -10.0f,
-	0, 0, 0, 1
-};
+GLfloat proj[16];
 
-GLfloat far = 100.0f;
-GLfloat near = 0.001;
+GLfloat rotx45[16];
 
-
-GLfloat proj[] = {
-	1/tan(fov/2.0), 0, 0, 0,
-	0, 1/tan(fov/2.0), 0, 0,
-	0, 0, (far+near)/(near-far), (2 * far * near)/(near-far),
-	0, 0, -1, 0
-};
-
-GLfloat matrix[] = {
-	1, 0, 0, 0,
-	0, 1, 0, 0,
-	0, 0, 1, 0,
-	0, 0, 0, 1
-};
-
+GLfloat matrix[16];
 
 GLuint program;
 GLint attribute_coord3d;
@@ -98,6 +75,27 @@ int mainwindow=-1;
 GLuint vabID=0;
 GLuint eabID=0;
 GLuint cabID=0;
+GLuint width = 640, height = 480;
+
+
+void initializeMatrix() {
+	//ortho(proj, -100, 100, -100, 100, 0.0001, 1000.0);
+	GLfloat aspect = (GLfloat)width/height;
+	perspective(proj, 45.0f, aspect, 0.01f, 1000.0f);
+	scaleMatrix4(scale,  20, 20, 20);
+	translationMatrix4(translation, 0, 0, -100.0f);
+
+}
+
+void updateMatrix() {
+	identity(matrix);
+	rotationXMatrix4(rotx45, rot);
+	multMatrix4(matrix, proj, matrix);
+	multMatrix4(matrix, translation, matrix);
+	multMatrix4(matrix, scale, matrix);
+	multMatrix4(matrix, rotx45, matrix);
+	rot = rot + rotInc;
+}
 
 string* readfile(const char *name){
 	ifstream source(name);
@@ -203,21 +201,8 @@ int inicializar(void)
 
 	const char *uniform_matrix_name = "matrix";
 	uniform_matrix = glGetUniformLocation(program, uniform_matrix_name);
-
-	GLfloat rotx45[] = {
-		1, 0, 0, 0,
-		0, cos(rot), -sin(rot), 0.0f,
-		0, sin(rot),  cos(rot), 0.0f,
-		0, 0.0f, 0.0f, 1.0f
-	};
-
-	identity(matrix);
-	multMatrix4(matrix, proj, matrix);
-	multMatrix4(matrix, translation, matrix);
-	multMatrix4(matrix, scale, matrix);
-	multMatrix4(matrix, rotx45, matrix);
-
-
+	initializeMatrix();
+	updateMatrix();
 	return 1;
 }
 
@@ -281,23 +266,10 @@ void fecharJanela() {
 	exit(0);
 }
 
+
 void rotate(unsigned char key, int x, int y) {
 	if (key == 'r') {
-		rot = rot + rotInc;
-
-		GLfloat rotx45[] = {
-			1, 0, 0, 0,
-			0, cos(rot), -sin(rot), 0.0f,
-			0, sin(rot),  cos(rot), 0.0f,
-			0, 0.0f, 0.0f, 1.0f
-		};
-
-		identity(matrix);
-		multMatrix4(matrix, proj, matrix);
-		multMatrix4(matrix, translation, matrix);
-		multMatrix4(matrix, scale, matrix);
-		multMatrix4(matrix, rotx45, matrix);
-
+		updateMatrix();
 		atualizarDesenho();
 	}
 }
@@ -307,7 +279,7 @@ int main(int argc, char* argv[])
 	/* Funções necessárias para iniciar a GLUT */
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGBA|GLUT_DOUBLE|GLUT_DEPTH);
-	glutInitWindowSize(640, 480);
+	glutInitWindowSize(width, height);
 	mainwindow = glutCreateWindow("Meu Primeiro Cubo Minha Vida");
 
 	glEnable(GL_DEPTH_TEST);
