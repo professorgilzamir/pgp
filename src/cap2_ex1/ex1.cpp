@@ -1,4 +1,8 @@
-/* Usando o padrão de saída fprintf */
+/*
+		Este exemplo mostra o uso básico de programa que usa
+		OpenGL e GLSL para mostrar um triangulo na tela.
+*/
+
 #include <cstdio>
 #include <cstdlib>
 #include <fstream>
@@ -21,7 +25,7 @@ GLfloat triangle_vertices[] = {
 	0.8, -0.8
 };
 
-GLfloat transformacao[] = { 
+GLfloat transformacao[] = {
 	1.0, 0.0,
 	0.0, 1.0
 };
@@ -102,7 +106,7 @@ int inicializar(void)
 	if (!link_ok) {
 		fprintf(stderr, "Error in glLinkProgram");
 		delete shadervs;
-		delete shaderfs;		
+		delete shaderfs;
 		return 0;
 	}
 
@@ -115,7 +119,7 @@ int inicializar(void)
 	}
 
 
-	uniform_transformacao = 
+	uniform_transformacao =
 			glGetUniformLocation(program, "transformacao");
 
 	return 1;

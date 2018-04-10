@@ -1,0 +1,25 @@
+CXX=g++
+RM=rm
+LIBS = -lfreeglut -lOpenGL32
+INCDIRS = -I../../includes
+CXXFLAGS=-Wall -g $(INCDIRS)
+BINDIR=../../bin
+
+SRCS=ex6.cpp
+OBJS=$(subst .cpp,.o,$(SRCS))
+BIN = ex6
+
+all: $(BIN)
+
+$(BIN): $(OBJS)
+	$(CXX)  -o $(BIN) $(OBJS) $(LIBS) $(CXXFLAGS) libglew32.dll.a
+
+install: $(BIN)
+	mv $(BIN) $(BINDIR)/$(BIN)
+
+clean:
+	$(RM) $(OBJS);\
+	$(RM) $(BIN);
+
+distclean: clean
+	$(RM) $(BINDIR)/$(BIN)

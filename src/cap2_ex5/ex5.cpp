@@ -52,7 +52,7 @@ GLuint cube_indices[] = {
 		1, 6, 5, 2, //Face de Cima
 		0, 3, 4, 7, //Face de Baixo
 		2, 5, 4, 3, //Face da Esquerda
-		7, 6, 1, 0, //Face da Direita 
+		7, 6, 1, 0, //Face da Direita
 };
 
 
@@ -159,7 +159,7 @@ int inicializar(void)
 	if (!link_ok) {
 		fprintf(stderr, "Error in glLinkProgram");
 		delete shadervs;
-		delete shaderfs;		
+		delete shaderfs;
 		return 0;
 	}
 
@@ -210,7 +210,7 @@ void atualizarDesenho()
 	glClearDepth(1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glUseProgram(program);
-	
+
 	glUniformMatrix4fv(uniform_matrix, 1, GL_TRUE, matrix);
 
 	glBindBuffer(GL_ARRAY_BUFFER, cabID);
@@ -237,7 +237,7 @@ void atualizarDesenho()
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eabID);
 
-	
+
 	//glDrawArrays(GL_LINE_LOOP, 0, 3);
 
 	 glDrawElements(
@@ -284,6 +284,7 @@ int main(int argc, char* argv[])
 	//glEnable(GL_CULL_FACE);
 	//glCullFace(GL_BACK);
 	const char* ver = (const char*)glGetString(GL_VERSION);
+	cout<<ver<<endl;
 	char major_number = ver[0];
 	if (major_number < '2'){
 		cout<<"Seu computador  nao suporta a versao 2.1 do OpenGL"<<endl;

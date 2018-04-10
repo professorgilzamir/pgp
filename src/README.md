@@ -26,3 +26,29 @@ onde <PLATAFORMA> pode ser macosx ou linux. Portanto, para MacOSX, o comando par
 $> make PLAT=macosx
 
 A nomeação do executável gerado segue as mesmas regras do caso do Linux.
+
+*********************************************
+COMPILANDO NO WINDOWS COM MSYS2 (VERSÃO BETA)
+*********************************************
+A melhor solução para compilar este projeto em Windows, sem muito trabalho e sem necessidade de adaptação, é instalar o msys2  (https://www.msys2.org). Depois de instalado o msys2, pressione a tecla Win+R e execute o seguinte comando:
+
+C:\msys64\msys2_shell.cmd -mingw32
+
+Na janela que se abrirá, teremos o shell do msys2 em 32 bits. Neste shell, execute os seguintes comandos:
+
+$>pacman -Syuu
+$>pacman -S mingw-w64-i686-gcc
+$>pacman -S mingw-w64-i686-mesa
+$>pacman -S mingw-w64-i686-freeglut
+$>pacman -S make
+
+Após a instalação dos pacotes acima, entre no diretório do exemplo que você quer compilar e execute o seguinte comando:
+
+$>make -f Makefile.windows
+
+Para limpar uma compilação existente, execute o seguinte comando:
+
+$>make -f Makefile.windows clean
+
+No caso do Windows, o executável gerado terá extensão ".exe".
+Este procedimento foi testado apenas no Windows 10.

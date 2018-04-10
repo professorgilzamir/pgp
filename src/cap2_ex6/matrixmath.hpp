@@ -25,7 +25,7 @@ namespace matrixmath {
 		return b;
 	}
 
-	GLfloat* ortho(GLfloat *m, GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat near, GLfloat far) {
+	GLfloat* ortho(GLfloat *m, GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat n, GLfloat f) {
 		if (m == NULL) {
 			m = new GLfloat[16];
 		}
@@ -35,8 +35,8 @@ namespace matrixmath {
 		GLfloat xnum = right+left;
 		GLfloat yden = top - bottom;
 		GLfloat ynum = top + bottom;
-		GLfloat zden = far - near;
-		GLfloat znum = far + near;
+		GLfloat zden = f - n;
+		GLfloat znum = f + n;
 
 		m[0] = 2.0f/xden;
 		m[3] = -xnum/xden;
@@ -114,8 +114,8 @@ namespace matrixmath {
 		identity(m);
 
 		m[0] = cos(rang);
-		m[2] = -sin(rang);
-		m[8] = sin(rang);
+		m[2] = sin(rang);
+		m[8] = -sin(rang);
 		m[10] = cos(rang);
 		return m;
 	}
@@ -173,7 +173,7 @@ namespace matrixmath {
 		GLfloat out0 = matrix[0] * vertex[0] + matrix[1] * vertex[1] + matrix[2] * vertex[2] + matrix[3] * vertex[3];
 		GLfloat out1 = matrix[4] * vertex[0] + matrix[5] * vertex[1] + matrix[6] * vertex[2] + matrix[7] * vertex[3];
 		GLfloat out2 = matrix[8] * vertex[0] + matrix[9] * vertex[1] + matrix[10] * vertex[2] + matrix[11] * vertex[3];
-		GLfloat out3 = matrix[12] * vertex[0] + matrix[13] * vertex[1] + matrix[14] * vertex[2] + matrix[15] * vertex[3];	
+		GLfloat out3 = matrix[12] * vertex[0] + matrix[13] * vertex[1] + matrix[14] * vertex[2] + matrix[15] * vertex[3];
 
 		out[0] = out0;
 		out[1] = out1;

@@ -53,7 +53,7 @@ GLuint cube_indices[] = {
 		1, 6, 5, 2, //Face de Cima
 		0, 3, 4, 7, //Face de Baixo
 		2, 5, 4, 3, //Face da Esquerda
-		7, 6, 1, 0, //Face da Direita 
+		7, 6, 1, 0, //Face da Direita
 };
 
 
@@ -81,7 +81,7 @@ GLuint width = 640, height = 480;
 
 
 void initializeMatrix() {
-	//ortho(proj, -100, 100, -100, 100, 0.0001, 1000.0);
+	//ortho(projection, -100, 100, -100, 100, 0.0001, 1000.0);
 
 	identity(model);
 
@@ -180,7 +180,7 @@ int inicializar(void)
 	if (!link_ok) {
 		fprintf(stderr, "Error in glLinkProgram");
 		delete shadervs;
-		delete shaderfs;		
+		delete shaderfs;
 		return 0;
 	}
 
@@ -231,7 +231,7 @@ void atualizarDesenho()
 	glClearDepth(1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glUseProgram(program);
-	
+
 	glUniformMatrix4fv(uniform_matrix, 1, GL_TRUE, matrix);
 
 	glBindBuffer(GL_ARRAY_BUFFER, cabID);
@@ -258,7 +258,7 @@ void atualizarDesenho()
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eabID);
 
-	
+
 	//glDrawArrays(GL_LINE_LOOP, 0, 3);
 
 	 glDrawElements(

@@ -12,4 +12,3 @@ clean:
 
 distclean: clean
 	make -f Makefile.$(PLAT) distclean;
-
