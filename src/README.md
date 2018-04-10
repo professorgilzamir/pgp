@@ -19,9 +19,9 @@ COMPILANDO NO MACOSX
 
 O procedimento para compilar os exemplos no MacOSX é parecido com o procedimento para se fazer isso no Linux. Contudo, ao executar o comando make, deve-se especificar a plataforma alvo, que é o Linux padrão. No geral, o comando para compilar é:
 
-$> make PLAT=<PLATAFORMA>
+$> make PLAT=PLATAFORMA
 
-onde <PLATAFORMA> pode ser macosx ou linux. Portanto, para MacOSX, o comando para compilação é:
+onde PLATAFORMA pode ser macosx ou linux. Portanto, para MacOSX, o comando para compilação é:
 
 $> make PLAT=macosx
 
