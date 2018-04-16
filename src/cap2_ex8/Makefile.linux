@@ -5,9 +5,9 @@ INCDIRS = -I../../includes
 CXXFLAGS=-Wall -g $(INCDIRS)
 BINDIR=../../bin
 
-SRCS=ex7.cpp
+SRCS=ex8.cpp
 OBJS=$(subst .cpp,.o,$(SRCS))
-BIN = ex7
+BIN = ex8
 
 all: $(BIN)
 

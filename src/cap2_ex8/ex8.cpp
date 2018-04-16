@@ -20,40 +20,13 @@
 using namespace std;
 using namespace matrixmath;
 
+#include "cubo.cpp"
+
+
 GLfloat fov = 45.0;
 
 GLfloat eye_position[3];
 GLfloat eye_orientation[2];
-
-
-GLfloat cube_vertices[] = {
-	1.000000f, -1.000000f, -1.000000f,
-	1.000000f, -1.000000f, 1.000000f,
-	-1.000000f, -1.000000f, 1.000000f,
-	-1.000000f, -1.000000f, -1.000000f,
-	1.000000f, 1.000000f, -1.000000f,
-	0.999999f, 1.000000f, 1.000001f,
-	-1.000000f, 1.000000f, 1.000000f,
-	-1.000000f, 1.000000f, -1.000000f,
-	1.224745f, -1.224745f, -0.000000f,
-	0.000000f, -1.224745f, -1.224745f,
-	1.224745f, 0.000000f, -1.224744f,
-	-0.000000f, -1.224745f, 1.224745f,
-	1.224744f, -0.000000f, 1.224745f,
-	-1.224745f, -1.224745f, -0.000000f,
-	-1.224745f, -0.000000f, 1.224745f,
-	-1.224745f, 0.000000f, -1.224745f,
-	1.224745f, 1.224745f, 0.000001f,
-	0.000000f, 1.224745f, -1.224745f,
-	-0.000001f, 1.224745f, 1.224745f,
-	-1.224745f, 1.224745f, -0.000000f,
-	0.000000f, 0.000000f, -1.732050f,
-	-1.732051f, 0.000000f, -0.000000f,
-	-0.000000f, -0.000000f, 1.732051f,
-	1.732051f, 0.000000f, 0.000000f,
-	-0.000000f, 1.732051f, 0.000000f,
-	0.000000f, -1.732051f, -0.000000f
-};
 
 
 GLfloat cube_colors[] = {
@@ -85,32 +58,6 @@ GLfloat cube_colors[] = {
 	0, 0, 1
 };
 
-GLuint cube_indices[] = {
-	26, 12, 3, 14,
-	25, 20, 7, 19,
-	24, 17, 6, 13,
-	23, 19, 7, 15,
-	22, 20, 8, 16,
-	21, 10, 4, 16,
-	18, 21, 16, 8,
-	5, 11, 21, 18,
-	11, 1, 10, 21,
-	14, 22, 16, 4,
-	3, 15, 22, 14,
-	15, 7, 20, 22,
-	12, 23, 15, 3,
-	2, 13, 23, 12,
-	13, 6, 19, 23,
-	9, 24, 13, 2,
-	1, 11, 24, 9,
-	11, 5, 17, 24,
-	17, 25, 19, 6,
-	5, 18, 25, 17,
-	18, 8, 20, 25,
-	10, 26, 14, 4,
-	1, 9, 26, 10,
-	9, 2, 12, 26
-};
 
 
 
@@ -138,19 +85,13 @@ GLuint width = 640, height = 480;
 
 void initializeMatrix() {
 	//ortho(projection, -100, 100, -100, 100, 0.0001, 1000.0);
-
-	for (int i = 0; i < 96; i++) {
-		cube_indices[i]--;
-	}
-
-
 	identity(model);
 
 	GLfloat aspect = (GLfloat)width/height;
 	perspective(projection, fov, aspect, 0.01f, 10000.0f);
 
 	scaleMatrix4(scale,  20, 20, 20);
-	translationMatrix4(translation, 0, 0, -200);
+	translationMatrix4(translation, 0, 0, -100);
 	multMatrix4(model, translation, model);
 	multMatrix4(model, scale, model);
 }
@@ -249,7 +190,7 @@ int inicializar(void)
 
 	glGenBuffers(1, &vabID);
 	glBindBuffer(GL_ARRAY_BUFFER, vabID);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertices), cube_vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(cubo_vertices), cubo_vertices, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 
@@ -260,7 +201,7 @@ int inicializar(void)
 
 	glGenBuffers(1, &eabID);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eabID);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cube_indices), cube_indices, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cubo_faceindex), cubo_faceindex, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 
@@ -291,7 +232,7 @@ void atualizarDesenho()
 {
 
 	glClearColor(1.0, 1.0, 1.0, 1.0);
-	//glClearDepth(1.0f);
+	glClearDepth(1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glUseProgram(program);
 
