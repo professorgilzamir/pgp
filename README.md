@@ -9,7 +9,7 @@ Por exemplo, o exemplo 1 do capítulo 2 indica o caso mais simples de programa g
 Na próxima seção, o objetivo de cada um dos capítulos será apresentado.
 
 O Objetivo de cada Capítulo
--
+----------------------------
 
 Capítulo 2 (ex2): o objetivo deste capítulo é a apresentação dos tópicos básicos de programação gráfica e a compreensão fundamental de pipeline em  OpenGL. Além disso, o capítulo avança em conceitos de visualização 3D, como projeções ortográficas e perspectiva, algoritmo z-buffer, cores e conceitos básicos de modelagem 3D.
 
