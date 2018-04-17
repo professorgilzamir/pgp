@@ -1,5 +1,5 @@
 #version 120
-varying vec4 fcolor;
+uniform vec4 uColor;
 void main(void){
-	gl_FragColor = fcolor;
+	gl_FragColor = uColor;
 }

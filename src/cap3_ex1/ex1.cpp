@@ -20,72 +20,52 @@
 using namespace std;
 using namespace matrixmath;
 
-GLfloat fov = 45.0;
+#include "cubo.cpp"
 
-GLfloat eye_position[3];
-GLfloat eye_orientation[2];
+//PROPRIEDADES DA CAMERA
 
-
-GLfloat cube_vertices[] = {
-	 1, -1,   1, //0
-	 1,  1,   1, //1
-	-1,  1,   1, //2
-	-1, -1,   1, //3
-	-1, -1,  -1, //4
-	-1,  1,  -1, //5
-	 1,  1,  -1, //6
-	 1, -1,  -1, //7
-};
-
-GLfloat cube_colors[] = {
-	1, 0, 0,
-	1, 0, 0,
-	1, 0, 0,
-	1, 0, 0,
-	0, 0, 1,
-	0, 0, 1,
-	0, 0, 1,
-	0, 0, 1
-};
-
-GLuint cube_indices[] = {
-		0, 1, 2, 3, //Face Fontal
-		4, 5, 6, 7, //Face Traseira
-		1, 6, 5, 2, //Face de Cima
-		0, 3, 4, 7, //Face de Baixo
-		2, 5, 4, 3, //Face da Esquerda
-		7, 6, 1, 0, //Face da Direita
-};
+//Propriedades da projecao perspectiva da camera
+GLfloat fov = 45.0; //fov = field of view ou angulo de abertura da camera
+GLfloat eye_position[3]; //Posicao da camera
+GLfloat eye_orientation[2]; //Orientacao da camera
 
 
-
-GLfloat scale[16];
-GLfloat translation[16];
-
-GLfloat model[16];
-GLfloat view[16];
-GLfloat projection[16];
+//PROPRIEDADES DOS OBJETOS (MODEL) NA CENA
+GLfloat scale[16]; //dimensao do objeto
+GLfloat translation[16]; //deslocamento em relacao a origem da cena
 
 
-GLfloat matrix[16];
+//MATRIZES QUE COMBINAM AS TRANSFORMACOES DE MODELO, CAMERA E PROJECAO : MODEL-VIEW-PROJECTION
+GLfloat model[16]; //define as caracteristicas geometricas do modelo
+GLfloat view[16]; //define a posicao e a orientacao da camera
+GLfloat projection[16]; //define a projecao da camera
 
-GLuint program;
-GLint attribute_coord3d;
-GLint attribute_color3d;
-GLint uniform_matrix;
 
-int mainwindow=-1;
-GLuint vabID=0;
-GLuint eabID=0;
-GLuint cabID=0;
+GLfloat matrix[16]; //contem o produto projection * view * model
+
+
+//VARIAVEIS UTILIZADAS NO MAPEAMENTO DE DADOS DO PROGRAMA PARA OS SHADERS
+
+GLuint program; //ID do programa, lembrando que um programa aqui eh a combinacao de vertex com fragment shader
+GLint attribute_coord3d; //id do atributo coord3d (vertex shader)
+GLint uniform_color; //id uniform uColor (vertex shader)
+GLint uniform_matrix; //id do uniform matrix (vertex shader)
+
+int mainwindow=-1; //ID da janela de visualizacao criada pelo GLUT
+GLuint vabID=0; //ID do VAB (Vertex Array Buffer)
+GLuint eabID=0; //ID do EAB (Element Array Buffer)
 GLuint width = 640, height = 480;
 
+//FUNCOES DO PROGRAMA
 
+/**
+* 
+* Configuracao inicial das matrizes MODEL-VIEW-PROJECTION
+*
+*/
 void initializeMatrix() {
 	//ortho(projection, -100, 100, -100, 100, 0.0001, 1000.0);
-
 	identity(model);
-
 	GLfloat aspect = (GLfloat)width/height;
 	perspective(projection, fov, aspect, 0.01f, 10000.0f);
 
@@ -95,6 +75,12 @@ void initializeMatrix() {
 	multMatrix4(model, scale, model);
 }
 
+
+/**
+*
+* Atualizacao das matrizes de acordo com as acoes do usuario
+*
+*/
 void updateMatrix() {
 	identity(matrix);
 	identity(view);
@@ -118,6 +104,12 @@ void updateMatrix() {
 	multMatrix4(matrix, model, matrix);
 }
 
+
+/**
+*
+* Leitura de um arquivo com path name e armazenamento do conteudo em um array de strings
+*
+*/
 string* readfile(const char *name){
 	ifstream source(name);
 	string line;
@@ -133,8 +125,11 @@ string* readfile(const char *name){
 	return content;
 }
 
-/* COLOCAREMOS AS VARIAVEIS GLOBAIS AQUI MAIS TARDE */
-
+/**
+*
+* Compila os shaders, monta o programa e cria buffers iniciais
+*
+*/
 int inicializar(void)
 {
 	GLint compile_ok = GL_FALSE, link_ok = GL_FALSE;
@@ -176,7 +171,6 @@ int inicializar(void)
 	glGetProgramiv(program, GL_LINK_STATUS, &link_ok);
 
 
-
 	delete shadervs;
 	delete shaderfs;
 
@@ -189,18 +183,13 @@ int inicializar(void)
 
 	glGenBuffers(1, &vabID);
 	glBindBuffer(GL_ARRAY_BUFFER, vabID);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertices), cube_vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(cubo_vertices), cubo_vertices, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-
-	glGenBuffers(1, &cabID);
-	glBindBuffer(GL_ARRAY_BUFFER, cabID);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(cube_colors), cube_colors, GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	glGenBuffers(1, &eabID);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eabID);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cube_indices), cube_indices, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cubo_faceindex), cubo_faceindex, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 
@@ -212,21 +201,23 @@ int inicializar(void)
 	}
 
 
-	const char *attribute_color_name = "color3d";
-	attribute_color3d = glGetAttribLocation(program, attribute_color_name);
-	if (attribute_color3d == -1) {
-		fprintf(stderr, "Could not bind attribute %s\n", attribute_color_name);
-		return 0;
-	}
-
+	const char *uniform_color_name = "uColor";
+	uniform_color = glGetUniformLocation(program, uniform_color_name);
 
 	const char *uniform_matrix_name = "matrix";
 	uniform_matrix = glGetUniformLocation(program, uniform_matrix_name);
+
+
 	initializeMatrix();
 	updateMatrix();
 	return 1;
 }
 
+/**
+*
+* Atualiza o desenho na tela de acordo com o modelo de cena atual.
+*
+*/
 void atualizarDesenho()
 {
 
@@ -236,16 +227,7 @@ void atualizarDesenho()
 	glUseProgram(program);
 
 	glUniformMatrix4fv(uniform_matrix, 1, GL_TRUE, matrix);
-
-	glBindBuffer(GL_ARRAY_BUFFER, cabID);
-	glEnableVertexAttribArray(attribute_color3d);
-	glVertexAttribPointer(attribute_color3d,
-				3,
-				GL_FLOAT,
-				GL_FALSE,
-				0,
-				NULL
-				);
+	glUniform4f(uniform_color, 1.0f, 0.0f, 0.0f, 1.0f);
 
 	glBindBuffer(GL_ARRAY_BUFFER, vabID);
 	glEnableVertexAttribArray(attribute_coord3d);
@@ -261,32 +243,43 @@ void atualizarDesenho()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eabID);
 
 
-	//glDrawArrays(GL_LINE_LOOP, 0, 3);
-
 	 glDrawElements(
      	GL_QUADS,      // mode
-     	24,    // count
+     	96,    // count
      	GL_UNSIGNED_INT,   // type
     	 (void*)0           // element array buffer offset
 	 );
 
-	glDisableVertexAttribArray(attribute_color3d);
 	glDisableVertexAttribArray(attribute_coord3d);
 	glutSwapBuffers();
 }
 
+/**
+*
+* Desaloca o programa gerado.
+*
+*/
 void finalizar()
 {
   glDeleteProgram(program);
 }
 
+/**
+*
+* Garante que a janela da aplicacao sera fechada.
+*
+*/
 void fecharJanela() {
 	glutDestroyWindow(mainwindow);
 	finalizar();
 	exit(0);
 }
 
-
+/**
+*
+* Captura eventos do teclado que representam acoes do usuario.
+*
+*/
 void eventoDeTeclado(unsigned char key, int x, int y) {
 	if (key == 'i') {
 		eye_orientation[0] += 10.0f;
@@ -305,6 +298,11 @@ void eventoDeTeclado(unsigned char key, int x, int y) {
 	atualizarDesenho();
 }
 
+/**
+*
+* Ponto de entrada do programa.
+*
+*/
 int main(int argc, char* argv[])
 {
 	/* Funções necessárias para iniciar a GLUT */
