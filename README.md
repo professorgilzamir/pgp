@@ -13,4 +13,4 @@ O Objetivo de cada Capítulo
 
 Capítulo 2 (ex2): o objetivo deste capítulo é a apresentação dos tópicos básicos de programação gráfica e a compreensão fundamental de pipeline em  OpenGL. Além disso, o capítulo avança em conceitos de visualização 3D, como projeções ortográficas e perspectiva, algoritmo z-buffer, cores e conceitos básicos de modelagem 3D.
 
-Capítulo 3 (ex3): neste capítulo, os conceitos de normal, fontes de luz, sombreamento e modelos de iluminação são trabalhados de forma progressiva. No final do capítulo, o objetivo é conseguir um cenário com modelos básicos de iluminação, de forma que a aparência dos objetos o mais tridimensional possível.
+Capítulo 3 (ex3): neste capítulo, os conceitos de normal, fontes de luz, sombreamento e modelos de iluminação são trabalhados de forma progressiva. No final do capítulo, o objetivo é conseguir um cenário com modelos básicos de iluminação, de forma que a aparência dos objetos seja o mais tridimensional possível.
