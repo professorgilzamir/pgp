@@ -10,9 +10,9 @@ namespace utils {
 		out[2] = 0.0f;
 
 
-		for (int i = 0; i < numberOfFaces; i++) {
+		for (GLuint i = 0; i < numberOfFaces; i++) {
 			GLuint pos = numVerticesInFace * i;
-			for (int j = 0; j < numVerticesInFace; j++) {
+			for (GLuint j = 0; j < numVerticesInFace; j++) {
 				GLuint idx = faceIndex[pos+j];
 				if (idx == vertexIndex) {
 					GLuint nidx = i * 3;
@@ -27,7 +27,7 @@ namespace utils {
 
 	void getNormals(GLuint numberOfVertices, GLuint *faceIndex, GLuint *normalsIndex, GLfloat *normals,
 								GLuint numberOfFaces, GLuint numVerticesInFace, GLfloat *out) {
-		for (int i = 0; i < numberOfVertices; i++) {
+		for (GLuint i = 0; i < numberOfVertices; i++) {
 			GLfloat n[3];
 			getNormalFromVertex(i, faceIndex, normalsIndex, normals, numberOfFaces, numVerticesInFace, n);
 			int idx = i * 3;
