@@ -36,13 +36,13 @@ C:\msys64\msys2_shell.cmd -mingw32
 
 Na janela que se abrirá, teremos o shell do msys2 em 32 bits. Neste shell, execute os seguintes comandos
 
-'''
+```
 $>pacman -Syuu
 $>pacman -S mingw-w64-i686-gcc
 $>pacman -S mingw-w64-i686-mesa
 $>pacman -S mingw-w64-i686-freeglut
 $>pacman -S make
-'''
+```
 
 Após a instalação dos pacotes acima, entre no diretório do exemplo que você quer compilar e execute o seguinte comando:
 
