@@ -68,3 +68,13 @@ $>make -f Makefile.windows clean
 
 No caso do Windows, o executável gerado terá extensão ".exe".
 Este procedimento foi testado apenas no Windows 10.
+
+Pelo terminal do msys2, é criado um sistema de arquivos à parte parecido com o
+sistema de arquivos de uma distribuição Linux. À primeira vista, parece impossível
+acessar via terminal o sistema de arquivos do Windows. Mas isso é possível! Para
+acessar a raiz da unidade C por meio do terminal do msys2, por exemplo, digite o seguinte comando:
+
+```
+cd /c
+```
+Qualquer dúvida entre contato com gilzamir_gomes@uvanet.br.
