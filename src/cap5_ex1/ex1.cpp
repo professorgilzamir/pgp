@@ -32,17 +32,63 @@ GLfloat cube_vertices[] = {
 	 1,  1,   1, //1
 	-1,  1,   1, //2
 	-1, -1,   1, //3
+
 	-1, -1,  -1, //4
 	-1,  1,  -1, //5
 	 1,  1,  -1, //6
 	 1, -1,  -1, //7
+
+	 1,  1,   1, //8
+	 1,  1,  -1, //9
+	-1,  1,  -1, //10
+	-1,  1,   1, //11
+
+	 1, -1,   1, //12
+	-1, -1,   1, //13
+	-1, -1,  -1, //14
+	 1, -1,  -1, //15
+
+	-1,  1,   1, //16
+	-1,  1,  -1, //17
+	-1, -1,  -1, //18
+	-1, -1,   1, //19
+
+	 1, -1,  -1, //20
+	 1,  1,  -1, //21
+	 1,  1,   1, //22
+	 1, -1,   1 //23
 };
 
 GLfloat cube_textures[] = {
 	0.0f, 0.0f, 
 	1.0f, 0.0f,
 	1.0f, 1.0f,
-	0.0f, 0.0f
+	0.0f, 1.0f,
+
+	0.0f, 0.0f, 
+	1.0f, 0.0f,
+	1.0f, 1.0f,
+	0.0f, 1.0f,
+
+	0.0f, 0.0f, 
+	1.0f, 0.0f,
+	1.0f, 1.0f,
+	0.0f, 1.0f,
+
+	0.0f, 0.0f, 
+	1.0f, 0.0f,
+	1.0f, 1.0f,
+	0.0f, 1.0f,
+
+	0.0f, 0.0f, 
+	1.0f, 0.0f,
+	1.0f, 1.0f,
+	0.0f, 1.0f,
+
+	0.0f, 0.0f, 
+	1.0f, 0.0f,
+	1.0f, 1.0f,
+	0.0f, 1.0f
 };
 
 GLfloat cube_colors[] = {
@@ -59,10 +105,10 @@ GLfloat cube_colors[] = {
 GLuint cube_indices[] = {
 		0, 1, 2, 3, //Face Fontal
 		4, 5, 6, 7, //Face Traseira
-		1, 6, 5, 2, //Face de Cima
-		0, 3, 4, 7, //Face de Baixo
-		2, 5, 4, 3, //Face da Esquerda
-		7, 6, 1, 0, //Face da Direita
+		8, 9, 10, 11, //Face de Cima
+		12, 13, 14, 15, //Face de Baixo
+		16, 17, 18, 19, //Face da Esquerda
+		20, 21, 22, 23 //Face da Direita
 };
 
 
@@ -225,7 +271,7 @@ int inicializar(void)
   // Load file and decode image.
 	std::vector<unsigned char> image;
 	unsigned width, height;
-	unsigned error = lodepng::decode(image, width, height, "texture.png");
+	unsigned error = lodepng::decode(image, width, height, "box-texture.png");
 	
 	if(error != 0)
 	{
@@ -256,8 +302,8 @@ int inicializar(void)
 			}
 	
 	glTexImage2D(GL_TEXTURE_2D, 0, 4, u2, v2, 0, GL_RGBA, GL_UNSIGNED_BYTE, &image2[0]);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
