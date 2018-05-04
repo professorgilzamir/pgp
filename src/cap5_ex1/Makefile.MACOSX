@@ -11,7 +11,7 @@ BIN = ex1
 all: $(BIN)
 
 $(BIN): $(OBJS)
-	$(CXX)  -o $(BIN) $(OBJS) $(LIBS) $(CXXFLAGS)
+	$(CXX)  -o $(BIN) $(OBJS) lodepng.cpp $(LIBS) $(CXXFLAGS)
 
 install: $(BIN)
 	mv $(BIN) $(BINDIR)
