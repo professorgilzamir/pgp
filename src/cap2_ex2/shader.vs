@@ -1,5 +1,8 @@
 #version 120
-attribute vec2 coord2d;
+attribute vec2 vertice;
+uniform mat2 transformacao;
+
 void  main(void) {
-	gl_Position = vec4(coord2d, 0.0, 1.0);
+	vec2 verticeTransformado = transformacao * vertice;
+	gl_Position = vec4(verticeTransformado, 0.0, 1.0);
 }

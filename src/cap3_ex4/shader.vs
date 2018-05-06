@@ -19,7 +19,7 @@ void  main(void) {
 
 	vec4 shinenessColor = vec4(0.8, 0.8, 0.8, 1.0);
 
-	float shineness = 1.0;
+	float shineness = 60.0;
 
 	vec3 L = normalize(lightPos-vec3(posFinal));
 	vec3 N = normalize(normal3d);
@@ -30,5 +30,5 @@ void  main(void) {
 							+ materialColor * lightColor * max(0, dot(N,L)) //reflexao difusa
 							+ shinenessColor * lightColor * pow(max(0, dot(N, R)),shineness); //reflexao especular
 
-	gl_Position =  projection * posFinal;
+	gl_Position =  projection * view * posFinal;
 }

@@ -10,7 +10,7 @@ uniform vec4 materialColor;
 
 void  main(void) {
 
-	vec4 posFinal = model * vec4(coord3d, 1.0);
+	vec4 posFinal = view * model * vec4(coord3d, 1.0);
 
 	vec3 lightPos = vec3(0, 10, -20);
 	vec4 lightColor = vec4(0.8, 0.8, 0.8, 1.0);

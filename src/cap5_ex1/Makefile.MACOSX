@@ -1,12 +1,13 @@
 CXX=g++
 RM=rm -f
 LIBS = -framework GLUT -framework OpenGL
-CXXFLAGS=-Wno-deprecated
+INCDIRS = -I../../includes
+CXXFLAGS=-Wno-deprecated $(INCDIRS)
 BINDIR=../../bin
 
-SRCS=ex1.cpp
+SRCS=ex.cpp
 OBJS=$(subst .cpp,.o,$(SRCS))
-BIN = ex1
+BIN = ex
 
 all: $(BIN)
 
@@ -22,6 +23,3 @@ clean:
 
 distclean: clean
 	$(RM) $(BINDIR)/$(BIN)
-
-
-

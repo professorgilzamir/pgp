@@ -5,9 +5,9 @@ INCDIRS = -I../../includes
 CXXFLAGS=-Wall -g $(INCDIRS)
 BINDIR=../../bin
 
-SRCS=ex3.cpp
+SRCS=ex.cpp
 OBJS=$(subst .cpp,.o,$(SRCS))
-BIN = ex3
+BIN = ex
 
 all: $(BIN)
 
@@ -23,5 +23,3 @@ clean:
 
 distclean: clean
 	$(RM) $(BINDIR)/$(BIN)
-
-
