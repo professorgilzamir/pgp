@@ -27,7 +27,7 @@ void  main(void) {
 
 	finalColor = ambienteColor * ambientReflection //iluminacao ambiente
 							+ diffuseReflection * lightColor * max(0, dot(N,L)) //reflexao difusa
-							+ specularReflection * lightColor * pow(max(0, dot(N, R)),shininess); //reflexao especular
+							+ specularReflection * lightColor * pow(max(0, dot(N, R)), shininess); //reflexao especular
 
 	gl_Position =  projection * view * posFinal;
 }

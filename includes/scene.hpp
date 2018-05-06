@@ -157,7 +157,7 @@ namespace scene {
 				diffuseReflectionName = "diffuseReflection";
 				ambientReflectionName = "ambientReflection";
 				specularReflectionName = "specularReflection";
-				shininessName = "shininessName";
+				shininessName = "shininess";
 			}
 
 			void setData(const Object &data) {
