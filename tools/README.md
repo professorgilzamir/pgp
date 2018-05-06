@@ -17,6 +17,8 @@ Este comando gerará uma variável de dados para cada informação 3D relevante 
 $> python converter.py cubo obj3d
 
 OBSERVAÇÃO 1: o script converter.py foi desenvolvido em Python 3.
+
+
 OBSERVAÇÃO 2: apesar do script converter.py não ter problemas em exportar modelos que misturam faces quadradas e triângulares, por uma questão de compatibilidade com o código-fonte da camada PGP, é recomendado que todos os modelos exportados sejam triangularizados antes da exportação. Por exemplo, quando se exporta uma esfera UV do Blender, as faces nos polos são triângulos, enquanto que as faces no equador e vizinhanças são quadráticas. Portanto, antes de exportar uma esfera pelo Blender, triangularize-a do seguinte modo: 1) entre no modo de edição com a esfera selecionada; 2) com o mouse na 3D View, pressione a combinação de teclas CTRL+T. Volte para o modo Object do Blender e exporte o seu modelo já triangulizado.
 ----------------------------------------------------------------
 Quaisquer dúvidas, envie um email para gilzamir_gomes@uvanet.br
