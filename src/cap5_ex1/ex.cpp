@@ -12,6 +12,7 @@
 #include <matrixmath.hpp>
 #include <shaderutils.hpp>
 #include <scene.hpp>
+#include <textureutils.hpp>
 
 #ifdef __APPLE__
 #include <GLUT/glut.h>
@@ -25,6 +26,7 @@ using namespace std;
 using namespace matrixmath;
 using namespace shaderutils;
 using namespace scene;
+using namespace textureutils;
 
 GLfloat fov = 45.0;
 
@@ -169,39 +171,19 @@ int inicializar(void)
 
 	
   // Load file and decode image.
-	std::vector<unsigned char> image;
-	unsigned width, height;
-	unsigned error = lodepng::decode(image, width, height, "box-texture.png");
-	
-	if(error != 0)
-	{
-		std::cout << "error: texture can be loaded!!! " << endl;
+	std::vector<unsigned char> image2;
+	GLfloat s, t;
+
+	try {
+		image2 = getTextureFromImage("box-texture.png", s, t);
+	} catch(std::exception e) {
+		cout<<e.what()<<endl;
 		return 0;
 	}
 	
 
-  // Texture size must be power of two for the primitive OpenGL version this is written for. Find next power of two.
-  size_t u2 = 1; while(u2 < width) u2 *= 2;
-
-  size_t v2 = 1; while(v2 < height) v2 *= 2;
-
-  // Ratio for power of two version compared to actual version, to render the non power of two image with proper size.
-
-  double u3 = (double)width / u2;
-
-  double v3 = (double)height / v2;
-
-  	// Make power of two version of the image.
-	std::vector<unsigned char> image2(u2 * v2 * 4);
-	for(size_t y = 0; y < height; y++)
-		for(size_t x = 0; x < width; x++)
-			for(size_t c = 0; c < 4; c++)
-			{
-				image2[4 * u2 * y + 4 * x + c] = image[4 * width * y + 4 * x + c];
-
-			}
 	try {
-		proxy->setTexture(&image2[0], u2, v2);
+		proxy->setTexture(&image2[0], s, t);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
