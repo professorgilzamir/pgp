@@ -66,9 +66,9 @@ GLfloat cube_vertices[] = {
 };
 
 GLfloat cube_textures[] = {
-	0.0f, 0.0f, 
+	1.0f, 1.0f, 
 	1.0f, 0.0f,
-	1.0f, 1.0f,
+	0.0f, 0.0f,
 	0.0f, 1.0f,
 
 	0.0f, 0.0f, 
@@ -132,13 +132,17 @@ void initializeMatrix() {
 }
 
 void updateMatrix() {
+
+
+
 	camera->setViewIdentity();
 	camera->rotateX(eye_orientation[0]);
 	camera->rotateY(eye_orientation[1]);
+	cubo->data.translate(0, 0, -5);
+	cubo->data.rotateY(1);
+	cubo->data.translate(0, 0, 5);
+
 	try {
-		cubo->data.translate(0, 0, -5);
-		cubo->data.scale(0.5f, 0.5f, 0.5f);
-		cubo->data.translate(0, 0, 5);
 		cubo->update();
 	} catch(string msg) {
 		cout<<msg<<endl;
@@ -172,6 +176,7 @@ int inicializar(void)
 		proxy->setAttribute("color3d", cube_colors, sizeof(cube_colors));
 		proxy->setAttribute("texcoord", cube_textures, sizeof(cube_textures), 2);
 		proxy->setUniform1i("tex", 0);
+		proxy->setUniform1i("other", 1);
 		proxy->setElementPrimitive(cube_indices, sizeof(cube_indices));
 	} catch(string error) {
 		cout<<error<<endl;
@@ -180,32 +185,61 @@ int inicializar(void)
 
 	
   // Load file and decode image.
+	std::vector<unsigned char>  image1;
 	std::vector<unsigned char> image2;
-	GLfloat s, t;
+	GLfloat s1, s2, t1, t2;
 
-	try {
-		image2 = getTextureFromImage("box-texture.png", s, t);
-	} catch(std::exception e) {
-		cout<<e.what()<<endl;
-		return 0;
-	}
+
 	
 
 	try {
-		proxy->setTexture(&image2[0], s, t);
+
+		glActiveTexture(GL_TEXTURE0);
+		try {
+			image1 = getTextureFromImage("texture.png", s1, t1);
+		} catch(std::exception e) {
+			cout<<e.what()<<endl;
+			return 0;
+		}
+		GLuint tex1 = proxy->setTexture(&image1[0], s1, t1);
+		glBindTexture(GL_TEXTURE_2D, tex1);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		//glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+		
+
+		glActiveTexture(GL_TEXTURE1);
+
+		try {
+			image2 = getTextureFromImage("box-texture.png", s2, t2);
+		} catch(std::exception e) {
+			cout<<e.what()<<endl;
+			return 0;
+		}
+		
+		GLint tex2 = proxy->setTexture(&image2[0], s2, t2);
+		glBindTexture(GL_TEXTURE_2D, tex2);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		//glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+
 		proxy->useProgram();
 		camera->update();
 		cubo->update();
+	//	GLsizei maxTexture;
+	//	glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &maxTexture);
+	//	cout<<maxTexture<<endl;
+
 	} catch(string error) {
 		cout<<error<<endl;
 		return 0;
 	}
 
-	glActiveTexture(GL_TEXTURE0);
+
 
 	return 1;
 }

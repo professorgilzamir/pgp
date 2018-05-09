@@ -9,7 +9,7 @@ namespace textureutils {
 	  // Load file and decode image.
 		std::vector<unsigned char> image;
 		unsigned width, height;
-		unsigned error = lodepng::decode(image, width, height, "box-texture.png");
+		unsigned error = lodepng::decode(image, width, height, path);
 		
 		if(error != 0)
 		{
