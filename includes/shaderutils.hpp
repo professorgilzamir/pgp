@@ -86,16 +86,15 @@ namespace shaderutils {
         glLinkProgram(program);
         glGetProgramiv(program, GL_LINK_STATUS, &link_ok);
 
-
-	    delete shadervs;
-	    delete shaderfs;
-
     	if (!link_ok) {
 		    delete shadervs;
 		    delete shaderfs;
             getErrorShaderInfoLog(program, 2);
 		    return 0;
 	    }
+
+        delete shadervs;
+        delete shaderfs;
 
         return program;
     }
