@@ -156,7 +156,7 @@ int inicializar(void)
 
 	initializeMatrix();
 	updateMatrix();
-	
+
 	try {
 		proxy->useProgram();
 		proxy->setAttribute("coord3d", cube_vertices, sizeof(cube_vertices));
@@ -169,26 +169,23 @@ int inicializar(void)
 		return 0;
 	}
 
-	
-  // Load file and decode image.
-	std::vector<unsigned char> image2;
+
+	std::vector<unsigned char> image;
 	GLfloat s, t;
 
 	try {
-		image2 = getTextureFromImage("box-texture.png", s, t);
-	} catch(std::exception e) {
-		cout<<e.what()<<endl;
+		image = getTextureFromImage("box-texture.png", s, t);
+	} catch(string e) {
+		cout<<e<<endl;
 		return 0;
 	}
-	
 
 	try {
-		proxy->setTexture(&image2[0], s, t);
+		proxy->setTexture(&image[0], s, t);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
 
 		camera->update();
 		cubo->update();

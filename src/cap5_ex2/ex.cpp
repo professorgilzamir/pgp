@@ -197,8 +197,8 @@ int inicializar(void)
 		glActiveTexture(GL_TEXTURE0);
 		try {
 			image1 = getTextureFromImage("texture.png", s1, t1);
-		} catch(std::exception e) {
-			cout<<e.what()<<endl;
+		} catch(string e) {
+			cout<<e<<endl;
 			return 0;
 		}
 		GLuint tex1 = proxy->setTexture(&image1[0], s1, t1);

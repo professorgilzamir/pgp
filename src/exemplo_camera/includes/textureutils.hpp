@@ -9,11 +9,11 @@ namespace textureutils {
 	  // Load file and decode image.
 		std::vector<unsigned char> image;
 		unsigned width, height;
-		unsigned error = lodepng::decode(image, width, height, "box-texture.png");
+		unsigned error = lodepng::decode(image, width, height, path);
 		
 		if(error != 0)
 		{
-			throw std::runtime_error("error: texture can be loaded!!! ");
+			throw string("error: texture can not be loaded!!! ");
 		}
 		
 
@@ -23,9 +23,9 @@ namespace textureutils {
 	  size_t v2 = 1; while(v2 < height) v2 *= 2;
 
 	  // Ratio for power of two version compared to actual version, to render the non power of two image with proper size.
-	  GLfloat u3 = (GLfloat)width / u2;
+	  //GLfloat u3 = (GLfloat)width / u2;
 
-	  GLfloat v3 = (GLfloat)height / v2;
+	  //GLfloat v3 = (GLfloat)height / v2;
 
 	  	// Make power of two version of the image.
 		std::vector<unsigned char> image2(u2 * v2 * 4);
