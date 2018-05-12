@@ -187,7 +187,7 @@ int inicializar(void)
   // Load file and decode image.
 	std::vector<unsigned char>  image1;
 	std::vector<unsigned char> image2;
-	GLfloat s1, s2, t1, t2;
+	size_t s1, s2, t1, t2;
 
 
 	

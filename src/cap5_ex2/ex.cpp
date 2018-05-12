@@ -211,7 +211,7 @@ int inicializar(void)
 
 
 	std::vector<unsigned char> image;
-	GLfloat s, t;
+	size_t s, t;
 
 	try {
 		image = getTextureFromImage("texture.png", s, t);
