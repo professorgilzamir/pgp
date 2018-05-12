@@ -65,69 +65,36 @@ GLfloat cube_vertices[] = {
 	 1, -1,   1 //23
 };
 
-GLfloat cube_normals[] = {
-	 0,  0,   1, //0
-	 0,  0,   1, //1
-	 0,  0,   1, //2
-	 0,  0,   1, //3
-
-	 0,  0,   -1, 
-	 0,  0,   -1, 
-	 0,  0,   -1, 
-	 0,  0,   -1, 
-
-	 0,  1,   0, 
-	 0,  1,   0, 
-	 0,  1,   0, 
-	 0,  1,   0, 
-
-	 0, -1,  0,
-	 0, -1,  0, 
-	 0, -1,  0, 
-	 0, -1,  0, 
-
-	-1,  0,   0, 
-	-1,  0,   0, 
-	-1,  0,   0, 
-	-1,  0,   0, 
-
-	 1,  0,   0, 
-	 1,  0,   0, 
-	 1,  0,   0, 
-	 1,  0,   0 
-};
-
-
 GLfloat cube_textures[] = {
 	1.0f, 1.0f, 
 	1.0f, 0.0f,
 	0.0f, 0.0f,
 	0.0f, 1.0f,
 
-	1.0f, 1.0f,
+	0.0f, 0.0f, 
 	1.0f, 0.0f,
-	0.0f, 0.0f,
+	1.0f, 1.0f,
 	0.0f, 1.0f,
 
 	0.0f, 0.0f, 
-	0.0f, 1.0f,
-	1.0f, 1.0f,
 	1.0f, 0.0f,
+	1.0f, 1.0f,
+	0.0f, 1.0f,
 
 	0.0f, 0.0f, 
-	0.0f, 1.0f,
-	1.0f, 1.0f,
 	1.0f, 0.0f,
+	1.0f, 1.0f,
+	0.0f, 1.0f,
 
 	0.0f, 0.0f, 
-	0.0f, 1.0f,
-	1.0f, 1.0f,
 	1.0f, 0.0f,
+	1.0f, 1.0f,
+	0.0f, 1.0f,
 
 	0.0f, 0.0f, 
-	0.0f, 1.0f,
-	1.0f, 1.0f,
 	1.0f, 0.0f,
+	1.0f, 1.0f,
+	0.0f, 1.0f
 };
 
 GLfloat cube_colors[] = {
@@ -154,26 +121,32 @@ GLuint program;
 ShaderProxy *proxy = 0;
 ShadedObject *cubo = 0;
 Camera *camera = 0;
-GLfloat normalMatrix[16];
 
 int mainwindow=-1;
 
 GLuint width = 640, height = 480;
 
 void initializeMatrix() {
-	identity(normalMatrix);
 	camera->setPerspective(45.0, width/(float)height, 0.001f, 10000.0f);
-	cubo->data.translate(0, -1, -10);
-	cubo->data.scale(1.5f, 1.5f, 1.5f);
+	cubo->data.translate(0, 0, -5);
 }
 
 void updateMatrix() {
-	identity(normalMatrix);
+
+
+
 	camera->setViewIdentity();
-	camera->translate(0,0,10);
 	camera->rotateX(eye_orientation[0]);
 	camera->rotateY(eye_orientation[1]);
-	camera->translate(0,0,-10);
+	cubo->data.translate(0, 0, -5);
+	cubo->data.rotateY(1);
+	cubo->data.translate(0, 0, 5);
+
+	try {
+		cubo->update();
+	} catch(string msg) {
+		cout<<msg<<endl;
+	}
 }
 
 int inicializar(void)
@@ -190,73 +163,95 @@ int inicializar(void)
 	const GLuint QTD_ATRIBUTOS = 3;
 
 	proxy = new ShaderProxy(program, QTD_ATRIBUTOS);
+	
 	cubo = new ShadedObject("cubo", proxy);
+
 	camera = new Camera(proxy);
 
 	initializeMatrix();
-	updateMatrix();
-
+	
 	try {
 		proxy->useProgram();
 		proxy->setAttribute("coord3d", cube_vertices, sizeof(cube_vertices));
-		proxy->setAttribute("normal", cube_normals, sizeof(cube_normals));
+		proxy->setAttribute("color3d", cube_colors, sizeof(cube_colors));
 		proxy->setAttribute("texcoord", cube_textures, sizeof(cube_textures), 2);
 		proxy->setUniform1i("tex", 0);
-
+		proxy->setUniform1i("other", 1);
 		proxy->setElementPrimitive(cube_indices, sizeof(cube_indices));
 	} catch(string error) {
 		cout<<error<<endl;
 		return 0;
 	}
 
+	
+  // Load file and decode image.
+	std::vector<unsigned char>  image1;
+	std::vector<unsigned char> image2;
+	GLfloat s1, s2, t1, t2;
 
-	std::vector<unsigned char> image;
-	GLfloat s, t;
 
-	try {
-		image = getTextureFromImage("texture.png", s, t);
-	} catch(string e) {
-		cout<<e<<endl;
-		return 0;
-	}
+	
 
 	try {
-		proxy->setTexture(&image[0], s, t);
+
+		glActiveTexture(GL_TEXTURE0);
+		try {
+			image1 = getTextureFromImage("texture.png", s1, t1);
+		} catch(string e) {
+			cout<<e<<endl;
+			return 0;
+		}
+		GLuint tex1 = proxy->setTexture(&image1[0], s1, t1);
+		glBindTexture(GL_TEXTURE_2D, tex1);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		//glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+		
 
+		glActiveTexture(GL_TEXTURE1);
+
+		try {
+			image2 = getTextureFromImage("box-texture.png", s2, t2);
+		} catch(std::exception e) {
+			cout<<e.what()<<endl;
+			return 0;
+		}
+		
+		GLint tex2 = proxy->setTexture(&image2[0], s2, t2);
+		glBindTexture(GL_TEXTURE_2D, tex2);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		//glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+
+		proxy->useProgram();
 		camera->update();
 		cubo->update();
+	//	GLsizei maxTexture;
+	//	glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &maxTexture);
+	//	cout<<maxTexture<<endl;
+
 	} catch(string error) {
 		cout<<error<<endl;
 		return 0;
 	}
 
-	glActiveTexture(GL_TEXTURE0);
+
 
 	return 1;
 }
 
 void atualizarDesenho()
 {
-	glClearColor(0.6f, 0.6f, 0.6f, 0.6f);
+	glClearColor(1.0, 1.0, 1.0, 1.0);
 	glClearDepth(1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	GLfloat normalMatrix4[16];
-
-	multMatrix4(camera->view, cubo->data.transform, normalMatrix4);
-
 	try {
 		camera->update();
 		cubo->update();
-		subMatrix3FromMatrix4(normalMatrix4, normalMatrix);
-		if (!inverse(normalMatrix, normalMatrix)) {
-			cout<<"Error: normal matriz has not inverse!"<<endl;
-		}
-		transposeMatrix3(normalMatrix, normalMatrix);
-		proxy->setUniformMatrix3fv("normalMatrix", normalMatrix, 1, GL_TRUE);
 		cubo->drawElements();
 	} catch(string error) {
 		cout<<error<<endl;
@@ -303,9 +298,8 @@ void eventoDeTeclado(unsigned char key, int x, int y) {
 		eye_orientation[1] -= 10;
 	}
 
-
 	updateMatrix();
-	atualizarDesenho();
+	glutPostRedisplay();
 }
 
 int main(int argc, char* argv[])

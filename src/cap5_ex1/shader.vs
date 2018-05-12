@@ -1,14 +1,11 @@
 #version 120
-attribute vec3 coord3d;
-attribute vec3 color3d;
-attribute vec2 texcoord;
-uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
-varying vec4 fcolor;
-varying vec2 ftexcoord;
+attribute vec3 coord3d; //coordenadas do vertice
+attribute vec2 texcoord; //coordenadas de textura mapeadas para o vertice
+uniform mat4 model; //matriz de transformacao do modelo
+uniform mat4 view; //matriz de posicao e orientacao da camera
+uniform mat4 projection; //matriz de projecao
+varying vec2 ftexcoord; //coordenadas de textura interpolada para cada pixel
 void  main(void) {
 	ftexcoord = texcoord;
-	fcolor = vec4(color3d, 1.0);
 	gl_Position =  projection * view * model * vec4(coord3d, 1.0);
 }

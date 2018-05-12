@@ -204,11 +204,10 @@ namespace scene {
 	};
 
  	class Camera {
- 		private:
 
+ 		public:
  			GLfloat projection[16];
  			GLfloat view[16];
- 		public:
  			ShaderProxy *shader;
  			string viewName;
  			string projectionName;

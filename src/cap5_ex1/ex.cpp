@@ -66,35 +66,35 @@ GLfloat cube_vertices[] = {
 };
 
 GLfloat cube_textures[] = {
-	0.0f, 0.0f, 
+	1.0f, 1.0f, 
 	1.0f, 0.0f,
+	0.0f, 0.0f,
+	0.0f, 1.0f,
+
 	1.0f, 1.0f,
+	1.0f, 0.0f,
+	0.0f, 0.0f,
 	0.0f, 1.0f,
 
 	0.0f, 0.0f, 
-	1.0f, 0.0f,
-	1.0f, 1.0f,
 	0.0f, 1.0f,
+	1.0f, 1.0f,
+	1.0f, 0.0f,
 
 	0.0f, 0.0f, 
-	1.0f, 0.0f,
-	1.0f, 1.0f,
 	0.0f, 1.0f,
+	1.0f, 1.0f,
+	1.0f, 0.0f,
 
 	0.0f, 0.0f, 
-	1.0f, 0.0f,
-	1.0f, 1.0f,
 	0.0f, 1.0f,
+	1.0f, 1.0f,
+	1.0f, 0.0f,
 
 	0.0f, 0.0f, 
-	1.0f, 0.0f,
-	1.0f, 1.0f,
 	0.0f, 1.0f,
-
-	0.0f, 0.0f, 
-	1.0f, 0.0f,
 	1.0f, 1.0f,
-	0.0f, 1.0f
+	1.0f, 0.0f,
 };
 
 GLfloat cube_colors[] = {
@@ -129,12 +129,17 @@ GLuint width = 640, height = 480;
 void initializeMatrix() {
 	camera->setPerspective(45.0, width/(float)height, 0.001f, 10000.0f);
 	cubo->data.translate(0, 0, -10);
+	cubo->data.scale(1.5f, 1.5f, 1.5f);
 }
 
 void updateMatrix() {
+	//identity(cubo->data.transform);
+	//cubo->data.translate(0,0,-10);
 	camera->setViewIdentity();
+	camera->translate(0,0,10);
 	camera->rotateX(eye_orientation[0]);
 	camera->rotateY(eye_orientation[1]);
+	camera->translate(0,0,-10);
 }
 
 int inicializar(void)
@@ -160,7 +165,7 @@ int inicializar(void)
 	try {
 		proxy->useProgram();
 		proxy->setAttribute("coord3d", cube_vertices, sizeof(cube_vertices));
-		proxy->setAttribute("color3d", cube_colors, sizeof(cube_colors));
+		//proxy->setAttribute("color3d", cube_colors, sizeof(cube_colors));
 		proxy->setAttribute("texcoord", cube_textures, sizeof(cube_textures), 2);
 		proxy->setUniform1i("tex", 0);
 		proxy->setElementPrimitive(cube_indices, sizeof(cube_indices));
@@ -174,7 +179,7 @@ int inicializar(void)
 	GLfloat s, t;
 
 	try {
-		image = getTextureFromImage("box-texture.png", s, t);
+		image = getTextureFromImage("texture.png", s, t);
 	} catch(string e) {
 		cout<<e<<endl;
 		return 0;
@@ -201,7 +206,7 @@ int inicializar(void)
 
 void atualizarDesenho()
 {
-	glClearColor(1.0, 1.0, 1.0, 1.0);
+	glClearColor(0.6f, 0.6f, 0.6f, 0.6f);
 	glClearDepth(1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	try {

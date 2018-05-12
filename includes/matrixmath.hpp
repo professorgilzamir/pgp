@@ -194,6 +194,71 @@ namespace matrixmath {
 		return p;
 	}
 
+	GLfloat* transposeMatrix3(GLfloat a[9], GLfloat *p) {
+		if (p == NULL) {
+			p = new GLfloat[9];
+		}
+
+		GLfloat p0 = a[0];
+		GLfloat p1 = a[3];
+		GLfloat p2 = a[6];
+
+		GLfloat p3 = a[1];
+		GLfloat p4 = a[4];
+		GLfloat p5 = a[7];
+
+		GLfloat p6 = a[2];
+		GLfloat p7 = a[5];
+		GLfloat p8 = a[8];
+
+		p[0] = p0; p[1] = p1; p[2] = p2; p[3] = p3; p[4] = p4, p[5] = p5; p[6] = p6;
+		p[7] = p7; p[8] = p8;
+		return p;
+	}
+
+
+	GLfloat det(GLfloat m[9]) {
+		return m[6] * m[1] * m[5] + m[0] * m[4] * m[8] + m[3] * m[7] * m[2] 
+		       - m[0] * m[7] * m[5] - m[6] * m[4] * m[2] - m[3] * m[1] * m[8];
+	}
+
+	bool inverse(GLfloat m[9], GLfloat out[9], GLfloat precision=0.000000001) {
+		GLfloat d = det(m);
+		if ( abs(d) < precision ) return false;
+
+		GLfloat inv = 1.0f/d;
+		printf("invdet=%f\n",inv);
+
+		GLfloat a0 = (m[4] * m[8] - m[5] * m[7]);
+		GLfloat a3 = (m[3] * m[8] - m[5] * m[6]) * -1;
+		GLfloat a6 = (m[3] * m[7] - m[4] * m[6]);
+		GLfloat a1 = (m[1] * m[8] - m[7] * m[2]) * -1;
+		GLfloat a4 = (m[0] * m[8] - m[6] * m[2]);
+		GLfloat a7 = (m[0] * m[7] - m[6] * m[1]) * -1;
+		GLfloat a2 = (m[1] * m[5] - m[4] * m[2]);
+		GLfloat a5 = (m[0] * m[5] - m[3] * m[2]) * -1;
+		GLfloat a8 = (m[0] * m[4] - m[3] * m[1]);
+
+		out[0] = a0 * inv; out[1] = a1 * inv; out[2] = a2 * inv; out[3] = a3 * inv;
+		out[4] = a4 * inv; out[5] = a5 * inv; out[6] = a6 * inv; out[7] = a7 * inv;
+
+		return true;
+	}
+
+
+	void subMatrix3FromMatrix4(GLfloat matrix[16], GLfloat submatrix[9]){
+		submatrix[0] = matrix[0];
+		submatrix[1] = matrix[1];
+		submatrix[2] = matrix[2];
+
+		submatrix[3] = matrix[4];
+		submatrix[4] = matrix[5];
+		submatrix[5] = matrix[6];
+
+		submatrix[6] = matrix[8];
+		submatrix[7] = matrix[9];
+		submatrix[8] = matrix[10];
+	}
 
 	GLfloat* transform(GLfloat matrix[16], GLfloat vertex[4], GLfloat *out) {
 		if (out == NULL) {
