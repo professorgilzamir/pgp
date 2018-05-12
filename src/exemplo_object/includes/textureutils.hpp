@@ -5,7 +5,7 @@
 #include <iostream>
 
 namespace textureutils {
-	std::vector<unsigned char> getTextureFromImage(const char *path, GLfloat &s, GLfloat &t){
+	std::vector<unsigned char> getTextureFromImage(const char *path, size_t &s, size_t &t){
 	  // Load file and decode image.
 		std::vector<unsigned char> image;
 		unsigned width, height;

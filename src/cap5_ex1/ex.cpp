@@ -165,7 +165,6 @@ int inicializar(void)
 	try {
 		proxy->useProgram();
 		proxy->setAttribute("coord3d", cube_vertices, sizeof(cube_vertices));
-		//proxy->setAttribute("color3d", cube_colors, sizeof(cube_colors));
 		proxy->setAttribute("texcoord", cube_textures, sizeof(cube_textures), 2);
 		proxy->setUniform1i("tex", 0);
 		proxy->setElementPrimitive(cube_indices, sizeof(cube_indices));
@@ -176,7 +175,7 @@ int inicializar(void)
 
 
 	std::vector<unsigned char> image;
-	GLfloat s, t;
+	size_t s, t;
 
 	try {
 		image = getTextureFromImage("texture.png", s, t);
@@ -187,6 +186,7 @@ int inicializar(void)
 
 	try {
 		proxy->setTexture(&image[0], s, t);
+		glActiveTexture(GL_TEXTURE0);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -199,7 +199,7 @@ int inicializar(void)
 		return 0;
 	}
 
-	glActiveTexture(GL_TEXTURE0);
+
 
 	return 1;
 }

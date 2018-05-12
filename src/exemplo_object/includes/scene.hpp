@@ -9,8 +9,6 @@ using namespace shaderutils;
 using namespace matrixmath;
 
 namespace scene {
-
-
 	class Object {
 		public:
 			GLfloat transform[16];
@@ -76,25 +74,25 @@ namespace scene {
 			void translate(GLfloat x, GLfloat y, GLfloat z) {
 				GLfloat translation[16];
 				translationMatrix4(translation, x, y, z);
-				multMatrix4(translation, transform, transform);
+				multMatrix4(transform,  translation, transform);
 			}
 
 			void rotateX(GLfloat ang) {
 				GLfloat t[16];
 				rotationXMatrix4(t, ang);
-				multMatrix4(t, transform, transform);
+				multMatrix4(transform, t, transform);
 			}
 
 			void rotateY(GLfloat ang) {
 				GLfloat t[16];
 				rotationYMatrix4(t, ang);
-				multMatrix4(t, transform, transform);
+				multMatrix4(transform, t, transform);
 			}
 
 			void rotateZ(GLfloat ang) {
 				GLfloat t[16];
 				rotationZMatrix4(t, ang);
-				multMatrix4(t, transform, transform);
+				multMatrix4(transform, t, transform);
 			}
 
 			bool operator ==(const Object &origin) {
@@ -128,11 +126,11 @@ namespace scene {
 			void scale(GLfloat x, GLfloat y, GLfloat z) {
 				GLfloat t[16];
 				scaleMatrix4(t, x, y, z);
-				multMatrix4(t, transform, transform);
+				multMatrix4(transform, t, transform);
 			}
 
 			void applyTransform(GLfloat matrix[16]) {
-				multMatrix4(matrix, transform, transform);
+				multMatrix4(transform, matrix , transform);
 			}
 	};
 
@@ -170,7 +168,7 @@ namespace scene {
 				try {
 					this->shader->setUniformMatrix4fv(transformName.c_str(), data.transform, 1, GL_TRUE);
 				} catch(string error) {
-
+					cout<<error<<endl;
 				}
 
 				try {
@@ -190,7 +188,7 @@ namespace scene {
 
 					this->shader->setUniform1i(shininessName.c_str(), data.shininess);
 				} catch(string error){
-
+					cout<<error<<endl;
 				}
 			}
 
@@ -206,11 +204,10 @@ namespace scene {
 	};
 
  	class Camera {
- 		private:
 
+ 		public:
  			GLfloat projection[16];
  			GLfloat view[16];
- 		public:
  			ShaderProxy *shader;
  			string viewName;
  			string projectionName;

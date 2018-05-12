@@ -86,16 +86,15 @@ namespace shaderutils {
         glLinkProgram(program);
         glGetProgramiv(program, GL_LINK_STATUS, &link_ok);
 
-
-	    delete shadervs;
-	    delete shaderfs;
-
     	if (!link_ok) {
 		    delete shadervs;
 		    delete shaderfs;
             getErrorShaderInfoLog(program, 2);
 		    return 0;
 	    }
+
+        delete shadervs;
+        delete shaderfs;
 
         return program;
     }
@@ -154,6 +153,7 @@ namespace shaderutils {
             GLuint indexBufferID;
             map<string, GLuint> id;
             GLuint idx;
+            vector<GLuint> textureID;
             
 
         public:
@@ -212,15 +212,15 @@ namespace shaderutils {
             }
 
 
-            GLint setTexture(GLvoid *values, GLsizei width, GLsizei height, GLuint attributeSize=2,
+            GLuint setTexture(GLvoid *values, GLsizei width, GLsizei height, GLuint attributeSize=2,
                                     GLenum target=GL_TEXTURE_2D,  GLint level=0, GLint internalFormat=GL_RGBA, 
                                     GLint border=0, GLenum format=GL_RGBA, GLenum type=GL_UNSIGNED_BYTE) {
-                        GLint idx = createTexture();
-                        if (idx >= 0) {
-                             setTextureImage(idx, values, width, height, target, 
+                        GLuint idx = createTexture();
+                        
+                        setTextureImage(idx, values, width, height, target, 
                                             level, internalFormat, border, format, type);
             
-                        }
+                        textureID.push_back(idx);
                         return idx;
             }
 
@@ -521,6 +521,7 @@ namespace shaderutils {
             }
 
             ~ShaderProxy() {
+                glDeleteTextures(textureID.size(), &textureID[0]);
                 delete [] attributeID;
                 delete [] attributeSize;
                 delete [] attributeBufferID;
