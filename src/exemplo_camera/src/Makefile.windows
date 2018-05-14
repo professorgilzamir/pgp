@@ -2,7 +2,7 @@ CXX=g++
 RM=rm
 LIBS = -lfreeglut -lOpenGL32
 INCDIRS = -I../../includes
-CXXFLAGS=-Wall -g $(INCDIRS)
+CXXFLAGS=-Wall -g $(INCDIRS) -L../../lib
 BINDIR=../../bin
 
 SRCS=ex.cpp
