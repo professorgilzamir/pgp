@@ -1,6 +1,12 @@
 #include <shaderutils.hpp>
 #include <scene.hpp>
+
+#ifdef __APPLE__
 #include <GLUT/glut.h>
+#else
+#include "GL/glew.h"
+#include <GL/freeglut.h>
+#endif
 
 using namespace shaderutils;
 using namespace scene;
@@ -47,7 +53,14 @@ int main(int argc, char **argv) {
 	glutInitDisplayMode(GLUT_RGBA|GLUT_DOUBLE);
 	glutInitWindowSize(400, 400);
 	glutCreateWindow("Hello ShaderProxy");
-
+	#ifndef __APPLE__
+	GLenum glew_status = glewInit();
+	if (glew_status != GLEW_OK)
+	{
+		fprintf(stderr, "Erro: %s\n", glewGetErrorString(glew_status));
+		return EXIT_FAILURE;
+	}
+	#endif
 	init();
 
 	glutDisplayFunc(onDraw);

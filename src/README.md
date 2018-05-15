@@ -36,45 +36,6 @@ $> make PLAT=macosx
 A nomeação do executável gerado segue as mesmas regras do caso do Linux.
 
 *********************************************
-COMPILANDO NO WINDOWS COM MSYS2 (VERSÃO BETA)
+COMPILANDO NO WINDOWS 10
 *********************************************
-A melhor solução para compilar este projeto em Windows, sem muito trabalho e sem necessidade de adaptação, é instalar o msys2  (https://www.msys2.org). Depois de instalado o msys2, pressione a tecla Win+R e execute o seguinte comando:
-
-```
-C:\msys64\msys2_shell.cmd -mingw32
-```
-
-Na janela que se abrirá, teremos o shell do msys2 em 32 bits. Neste shell, execute os seguintes comandos
-
-```
-$>pacman -Syuu
-$>pacman -S mingw-w64-i686-gcc
-$>pacman -S mingw-w64-i686-mesa
-$>pacman -S mingw-w64-i686-freeglut
-$>pacman -S make
-```
-
-Após a instalação dos pacotes acima, entre no diretório do exemplo que você quer compilar e execute o seguinte comando:
-
-```
-$>make -f Makefile.windows
-```
-
-Para limpar uma compilação existente, execute o seguinte comando:
-
-```
-$>make -f Makefile.windows clean
-```
-
-No caso do Windows, o executável gerado terá extensão ".exe".
-Este procedimento foi testado apenas no Windows 10.
-
-Pelo terminal do msys2, é criado um sistema de arquivos à parte parecido com o
-sistema de arquivos de uma distribuição Linux. À primeira vista, parece impossível
-acessar via terminal o sistema de arquivos do Windows. Mas isso é possível! Para
-acessar a raiz da unidade C por meio do terminal do msys2, por exemplo, digite o seguinte comando:
-
-```
-cd /c
-```
-Qualquer dúvida entre contato com gilzamir_gomes@uvanet.br.
+Não há suporte para compilação direta no Windows 10, contudo, pode-se rodar programas Linux no Windows 10 por meio subsistema linux para windows (WSL). Existem vários tutorais que mostram como instalar o Ubuntu via WSL no Windows 10. E, para rodar programas gráficos com suporte a OpenGL, pode-se seguir a dica do segundo comentário no sitio: https://github.com/Microsoft/WSL/issues/2855.
