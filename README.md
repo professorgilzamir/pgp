@@ -20,3 +20,5 @@ Capítulo 3 (ex3): neste capítulo, os conceitos de normal, fontes de luz, sombr
 Capítulo 4 (ex4): neste capítulo, os conceitos de modelagem são explorados por meio da adição de vários objetos na cena e da implementação de algumas técnicas simples de modelagem.
 
 Capítulo 5 (ex5): neste capítulo, os conceitos básicos e mapeamento de textura são explorados.
+
+A documentação de referência da PGP pode acessada em: https://professorgilzamir.github.io/pgp/.
