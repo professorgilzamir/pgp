@@ -10,7 +10,7 @@ uniform vec4 materialColor;
 
 void  main(void) {
 
-	vec4 posFinal = view * model * vec4(coord3d, 1.0);
+	vec4 posFinal = model * vec4(coord3d, 1.0);
 
 	vec3 lightPos = vec3(0, 10, -10);
 	vec4 lightColor = vec4(0.8, 0.8, 0.8, 1.0);
@@ -26,9 +26,12 @@ void  main(void) {
 
 	vec3 R = normalize(2 * dot(N, L) - L);
 
-	finalColor =  ambienteColor * materialColor //iluminacao ambiente
-							+ materialColor * lightColor * max(0, dot(N,L)) //reflexao difusa
-							+ shinenessColor * lightColor * pow(max(0, dot(N, R)),shineness); //reflexao especular
+	vec3 cameraPosition = vec3(view[3][0], view[3][1], view[3][2]);
+	vec3 cameraDirection = normalize(cameraPosition-vec3(posFinal));
 
-	gl_Position =  projection * posFinal;
+	finalColor = ambienteColor * materialColor //iluminacao ambiente
+							+ materialColor * lightColor * max(0, dot(N,L)) //reflexao difusa
+							+ shinenessColor * lightColor * pow(max(0, dot(cameraDirection, R)),shineness); //reflexao especular
+
+	gl_Position =  projection * view * posFinal;
 }

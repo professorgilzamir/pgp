@@ -26,9 +26,12 @@ void  main(void) {
 
 	vec3 R = normalize(2 * dot(N, L) - L);
 
+	vec3 cameraPosition = vec3(view[3][0], view[3][1], view[3][2]);
+	vec3 cameraDirection = normalize(cameraPosition-vec3(posFinal));
+
 	finalColor = ambienteColor * materialColor //iluminacao ambiente
 							+ materialColor * lightColor * max(0, dot(N,L)) //reflexao difusa
-							+ shinenessColor * lightColor * pow(max(0, dot(N, R)),shineness); //reflexao especular
+							+ shinenessColor * lightColor * pow(max(0, dot(cameraDirection, R)),shineness); //reflexao especular
 
 	gl_Position =  projection * view * posFinal;
 }
