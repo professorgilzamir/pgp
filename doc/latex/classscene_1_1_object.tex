@@ -1,0 +1,271 @@
+\hypertarget{classscene_1_1_object}{}\section{scene\+:\+:Object Class Reference}
+\label{classscene_1_1_object}\index{scene\+::\+Object@{scene\+::\+Object}}
+
+
+{\ttfamily \#include $<$scene.\+hpp$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classscene_1_1_object_abba9ed18d83499faa00c6692566d1099}{Object}} ()
+\item 
+\mbox{\hyperlink{classscene_1_1_object_a423efa99f61b720b2ad7636ef921c92a}{Object}} (const \mbox{\hyperlink{classscene_1_1_object}{Object}} \&origin)
+\item 
+void \mbox{\hyperlink{classscene_1_1_object_ae9b3a533a04879ff602a0139574a1eea}{set\+Diffuse\+Reflection}} (G\+Lfloat R, G\+Lfloat G, G\+Lfloat B, G\+Lfloat A)
+\item 
+void \mbox{\hyperlink{classscene_1_1_object_a45cfa429181c936f2a381b0da3918b2d}{set\+Ambient\+Reflection}} (G\+Lfloat R, G\+Lfloat G, G\+Lfloat B, G\+Lfloat A)
+\item 
+void \mbox{\hyperlink{classscene_1_1_object_accd3d5bdb1dd7f9578e867a85d1e81de}{set\+Specular\+Reflection}} (G\+Lfloat R, G\+Lfloat G, G\+Lfloat B, G\+Lfloat A, G\+Lint \mbox{\hyperlink{classscene_1_1_object_ad0d064fc3da95f59e0fea3a39122e9c5}{shininess}})
+\item 
+void \mbox{\hyperlink{classscene_1_1_object_a001cc633cf64c4fdda259e0a6ea68851}{set\+Shininess}} (G\+Lint s)
+\item 
+void \mbox{\hyperlink{classscene_1_1_object_a8b633a7d024f1fd0102e260570e0fbab}{translate}} (G\+Lfloat x, G\+Lfloat y, G\+Lfloat z)
+\item 
+void \mbox{\hyperlink{classscene_1_1_object_aa3bc78a375ed8cdcef344770f443ffbb}{rotateX}} (G\+Lfloat ang)
+\item 
+void \mbox{\hyperlink{classscene_1_1_object_a0fef8a3994b26cb027e9d50eb5baffb5}{rotateY}} (G\+Lfloat ang)
+\item 
+void \mbox{\hyperlink{classscene_1_1_object_a5ec5c22bd192f1f3009b059a8d64e5bd}{rotateZ}} (G\+Lfloat ang)
+\item 
+bool \mbox{\hyperlink{classscene_1_1_object_a09626943cc3ea30e4b2d446675ce7e7c}{operator==}} (const \mbox{\hyperlink{classscene_1_1_object}{Object}} \&origin)
+\item 
+\mbox{\hyperlink{classscene_1_1_object}{Object}} \& \mbox{\hyperlink{classscene_1_1_object_ad1368be6ce1cded380489daa281091b2}{operator=}} (const \mbox{\hyperlink{classscene_1_1_object}{Object}} \&origin)
+\item 
+void \mbox{\hyperlink{classscene_1_1_object_aaba38d02516dee8a67ed872de1be488b}{scale}} (G\+Lfloat x, G\+Lfloat y, G\+Lfloat z)
+\item 
+void \mbox{\hyperlink{classscene_1_1_object_a30b47bcd40234142c873a8ccef3d8d17}{apply\+Transform}} (G\+Lfloat matrix\mbox{[}16\mbox{]})
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classscene_1_1_object_af1083bb93cb845302ede74e1302d4695}\label{classscene_1_1_object_af1083bb93cb845302ede74e1302d4695}} 
+G\+Lfloat {\bfseries transform} \mbox{[}16\mbox{]}
+\item 
+G\+Lfloat \mbox{\hyperlink{classscene_1_1_object_a4608ddd5375279ce31e1da48e9963759}{diffuse\+Reflection}} \mbox{[}4\mbox{]}
+\item 
+G\+Lfloat \mbox{\hyperlink{classscene_1_1_object_a25c68d682b3620b0257f59db215ffe23}{ambient\+Reflection}} \mbox{[}4\mbox{]}
+\item 
+G\+Lfloat \mbox{\hyperlink{classscene_1_1_object_ae584bfd42e862d486b31567c3f996773}{specular\+Reflection}} \mbox{[}4\mbox{]}
+\item 
+G\+Lint \mbox{\hyperlink{classscene_1_1_object_ad0d064fc3da95f59e0fea3a39122e9c5}{shininess}}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+A classe \mbox{\hyperlink{classscene_1_1_object}{Object}} representa objetos gráficos que possuem uma transformação geométrica associada e informações sobre o material do objeto, como cor da reflexão difusa, cor da reflexão da da luz ambiente e cor da reflexão especular. O atributo shininess define como o brilho se espalha na superfície do objeto. Apesar dessa interpretação, o objeto deve ser a associado a um vertex shader e um fragment shader que façam a implementação de um modelo de iluminação adequado. 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classscene_1_1_object_abba9ed18d83499faa00c6692566d1099}\label{classscene_1_1_object_abba9ed18d83499faa00c6692566d1099}} 
+\index{scene\+::\+Object@{scene\+::\+Object}!Object@{Object}}
+\index{Object@{Object}!scene\+::\+Object@{scene\+::\+Object}}
+\subsubsection{\texorpdfstring{Object()}{Object()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily scene\+::\+Object\+::\+Object (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Intensidade do brilho da reflexão especular. ~\newline
+Construtor padrão. \mbox{\Hypertarget{classscene_1_1_object_a423efa99f61b720b2ad7636ef921c92a}\label{classscene_1_1_object_a423efa99f61b720b2ad7636ef921c92a}} 
+\index{scene\+::\+Object@{scene\+::\+Object}!Object@{Object}}
+\index{Object@{Object}!scene\+::\+Object@{scene\+::\+Object}}
+\subsubsection{\texorpdfstring{Object()}{Object()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily scene\+::\+Object\+::\+Object (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classscene_1_1_object}{Object}} \&}]{origin }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Construtor por cópia. 
+\begin{DoxyParams}{Parameters}
+{\em origin} & objeto do qual a cópia será feita. \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classscene_1_1_object_a30b47bcd40234142c873a8ccef3d8d17}\label{classscene_1_1_object_a30b47bcd40234142c873a8ccef3d8d17}} 
+\index{scene\+::\+Object@{scene\+::\+Object}!apply\+Transform@{apply\+Transform}}
+\index{apply\+Transform@{apply\+Transform}!scene\+::\+Object@{scene\+::\+Object}}
+\subsubsection{\texorpdfstring{apply\+Transform()}{applyTransform()}}
+{\footnotesize\ttfamily void scene\+::\+Object\+::apply\+Transform (\begin{DoxyParamCaption}\item[{G\+Lfloat}]{matrix\mbox{[}16\mbox{]} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Aplica uma transformação genérica representada pela matriz {\ttfamily matrix}. 
+\begin{DoxyParams}{Parameters}
+{\em matrix} & um array de {\ttfamily 16} elementos representando uma matriz 4x4. A ordenação do array é feita por linha da matrix. Assim, os quatro primeiros elementos representam a primeira linha, os quatro segundos elementos, a segunda linha; e assim por diante. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classscene_1_1_object_ad1368be6ce1cded380489daa281091b2}\label{classscene_1_1_object_ad1368be6ce1cded380489daa281091b2}} 
+\index{scene\+::\+Object@{scene\+::\+Object}!operator=@{operator=}}
+\index{operator=@{operator=}!scene\+::\+Object@{scene\+::\+Object}}
+\subsubsection{\texorpdfstring{operator=()}{operator=()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classscene_1_1_object}{Object}}\& scene\+::\+Object\+::operator= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classscene_1_1_object}{Object}} \&}]{origin }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Atribui as configurações de transformação do objeto {\ttfamily origin} ao objeto que recebe a atribuição. \begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{classscene_1_1_object}{Object}}\& referência ao objeto recebedor da atribuição. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classscene_1_1_object_a09626943cc3ea30e4b2d446675ce7e7c}\label{classscene_1_1_object_a09626943cc3ea30e4b2d446675ce7e7c}} 
+\index{scene\+::\+Object@{scene\+::\+Object}!operator==@{operator==}}
+\index{operator==@{operator==}!scene\+::\+Object@{scene\+::\+Object}}
+\subsubsection{\texorpdfstring{operator==()}{operator==()}}
+{\footnotesize\ttfamily bool scene\+::\+Object\+::operator== (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classscene_1_1_object}{Object}} \&}]{origin }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Verifica se dois objetos são os mesmos. 
+\begin{DoxyParams}{Parameters}
+{\em origin} & Objeto a ser comparado. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bool true se os dois objetos são os mesmos ou false caso contrário. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classscene_1_1_object_aa3bc78a375ed8cdcef344770f443ffbb}\label{classscene_1_1_object_aa3bc78a375ed8cdcef344770f443ffbb}} 
+\index{scene\+::\+Object@{scene\+::\+Object}!rotateX@{rotateX}}
+\index{rotateX@{rotateX}!scene\+::\+Object@{scene\+::\+Object}}
+\subsubsection{\texorpdfstring{rotate\+X()}{rotateX()}}
+{\footnotesize\ttfamily void scene\+::\+Object\+::rotateX (\begin{DoxyParamCaption}\item[{G\+Lfloat}]{ang }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Rotaciona o objeto em torno do eixo X em um ângulo de Euler igual ao valor no parâmetro {\ttfamily ang}. 
+\begin{DoxyParams}{Parameters}
+{\em ang} & ângulo de rotação em graus. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classscene_1_1_object_a0fef8a3994b26cb027e9d50eb5baffb5}\label{classscene_1_1_object_a0fef8a3994b26cb027e9d50eb5baffb5}} 
+\index{scene\+::\+Object@{scene\+::\+Object}!rotateY@{rotateY}}
+\index{rotateY@{rotateY}!scene\+::\+Object@{scene\+::\+Object}}
+\subsubsection{\texorpdfstring{rotate\+Y()}{rotateY()}}
+{\footnotesize\ttfamily void scene\+::\+Object\+::rotateY (\begin{DoxyParamCaption}\item[{G\+Lfloat}]{ang }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Rotaciona o objeto em torno do eixo Y em um ângulo de Euler igual ao valor no parâmetro {\ttfamily ang}. 
+\begin{DoxyParams}{Parameters}
+{\em ang} & ângulo de rotação em graus. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classscene_1_1_object_a5ec5c22bd192f1f3009b059a8d64e5bd}\label{classscene_1_1_object_a5ec5c22bd192f1f3009b059a8d64e5bd}} 
+\index{scene\+::\+Object@{scene\+::\+Object}!rotateZ@{rotateZ}}
+\index{rotateZ@{rotateZ}!scene\+::\+Object@{scene\+::\+Object}}
+\subsubsection{\texorpdfstring{rotate\+Z()}{rotateZ()}}
+{\footnotesize\ttfamily void scene\+::\+Object\+::rotateZ (\begin{DoxyParamCaption}\item[{G\+Lfloat}]{ang }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Rotaciona o objeto em torno do eixo Z em um ângulo de Euler igual ao valor no parâmetro {\ttfamily ang}. 
+\begin{DoxyParams}{Parameters}
+{\em ang} & ângulo de rotação em graus. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classscene_1_1_object_aaba38d02516dee8a67ed872de1be488b}\label{classscene_1_1_object_aaba38d02516dee8a67ed872de1be488b}} 
+\index{scene\+::\+Object@{scene\+::\+Object}!scale@{scale}}
+\index{scale@{scale}!scene\+::\+Object@{scene\+::\+Object}}
+\subsubsection{\texorpdfstring{scale()}{scale()}}
+{\footnotesize\ttfamily void scene\+::\+Object\+::scale (\begin{DoxyParamCaption}\item[{G\+Lfloat}]{x,  }\item[{G\+Lfloat}]{y,  }\item[{G\+Lfloat}]{z }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Realiza um redimensionamento no objeto correspondente aos valores {\ttfamily x}, {\ttfamily y} e {\ttfamily z}. 
+\begin{DoxyParams}{Parameters}
+{\em x} & Aumento de escala ao longo do eixo x. \\
+\hline
+{\em y} & Aumento de escala ao longo do eixo y. \\
+\hline
+{\em z} & Aumento de escala ao longo do eixo z. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classscene_1_1_object_a45cfa429181c936f2a381b0da3918b2d}\label{classscene_1_1_object_a45cfa429181c936f2a381b0da3918b2d}} 
+\index{scene\+::\+Object@{scene\+::\+Object}!set\+Ambient\+Reflection@{set\+Ambient\+Reflection}}
+\index{set\+Ambient\+Reflection@{set\+Ambient\+Reflection}!scene\+::\+Object@{scene\+::\+Object}}
+\subsubsection{\texorpdfstring{set\+Ambient\+Reflection()}{setAmbientReflection()}}
+{\footnotesize\ttfamily void scene\+::\+Object\+::set\+Ambient\+Reflection (\begin{DoxyParamCaption}\item[{G\+Lfloat}]{R,  }\item[{G\+Lfloat}]{G,  }\item[{G\+Lfloat}]{B,  }\item[{G\+Lfloat}]{A }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Define a intensidade da reflexão ambiente. 
+\begin{DoxyParams}{Parameters}
+{\em R} & intensidade de reflexão da cor vermelha (R\+ED). \\
+\hline
+{\em G} & intensidade de reflexão da cor verde (G\+R\+E\+EN). \\
+\hline
+{\em B} & intensidade da reflexão da cor azul (B\+L\+UE). \\
+\hline
+{\em A} & valor da componente alfa. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classscene_1_1_object_ae9b3a533a04879ff602a0139574a1eea}\label{classscene_1_1_object_ae9b3a533a04879ff602a0139574a1eea}} 
+\index{scene\+::\+Object@{scene\+::\+Object}!set\+Diffuse\+Reflection@{set\+Diffuse\+Reflection}}
+\index{set\+Diffuse\+Reflection@{set\+Diffuse\+Reflection}!scene\+::\+Object@{scene\+::\+Object}}
+\subsubsection{\texorpdfstring{set\+Diffuse\+Reflection()}{setDiffuseReflection()}}
+{\footnotesize\ttfamily void scene\+::\+Object\+::set\+Diffuse\+Reflection (\begin{DoxyParamCaption}\item[{G\+Lfloat}]{R,  }\item[{G\+Lfloat}]{G,  }\item[{G\+Lfloat}]{B,  }\item[{G\+Lfloat}]{A }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Define a intensidade da reflexão difusa. 
+\begin{DoxyParams}{Parameters}
+{\em R} & intensidade de reflexão da cor vermelha (R\+ED). \\
+\hline
+{\em G} & intensidade de reflexão da cor verde (G\+R\+E\+EN). \\
+\hline
+{\em B} & intensidade da reflexão da cor azul (B\+L\+UE). \\
+\hline
+{\em A} & valor da componente alfa. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classscene_1_1_object_a001cc633cf64c4fdda259e0a6ea68851}\label{classscene_1_1_object_a001cc633cf64c4fdda259e0a6ea68851}} 
+\index{scene\+::\+Object@{scene\+::\+Object}!set\+Shininess@{set\+Shininess}}
+\index{set\+Shininess@{set\+Shininess}!scene\+::\+Object@{scene\+::\+Object}}
+\subsubsection{\texorpdfstring{set\+Shininess()}{setShininess()}}
+{\footnotesize\ttfamily void scene\+::\+Object\+::set\+Shininess (\begin{DoxyParamCaption}\item[{G\+Lint}]{s }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Define o valor do coeficiente de especularidade. 
+\begin{DoxyParams}{Parameters}
+{\em s} & Coeficiente de especularidade. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classscene_1_1_object_accd3d5bdb1dd7f9578e867a85d1e81de}\label{classscene_1_1_object_accd3d5bdb1dd7f9578e867a85d1e81de}} 
+\index{scene\+::\+Object@{scene\+::\+Object}!set\+Specular\+Reflection@{set\+Specular\+Reflection}}
+\index{set\+Specular\+Reflection@{set\+Specular\+Reflection}!scene\+::\+Object@{scene\+::\+Object}}
+\subsubsection{\texorpdfstring{set\+Specular\+Reflection()}{setSpecularReflection()}}
+{\footnotesize\ttfamily void scene\+::\+Object\+::set\+Specular\+Reflection (\begin{DoxyParamCaption}\item[{G\+Lfloat}]{R,  }\item[{G\+Lfloat}]{G,  }\item[{G\+Lfloat}]{B,  }\item[{G\+Lfloat}]{A,  }\item[{G\+Lint}]{shininess }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Define a intensidade da reflexão especular. 
+\begin{DoxyParams}{Parameters}
+{\em R} & intensidade de reflexão da cor vermelha (R\+ED). \\
+\hline
+{\em G} & intensidade de reflexão da cor verde (G\+R\+E\+EN). \\
+\hline
+{\em B} & intensidade da reflexão da cor azul (B\+L\+UE). \\
+\hline
+{\em A} & valor da componente alfa. \\
+\hline
+{\em shininess} & Coeficiente de especularidade. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classscene_1_1_object_a8b633a7d024f1fd0102e260570e0fbab}\label{classscene_1_1_object_a8b633a7d024f1fd0102e260570e0fbab}} 
+\index{scene\+::\+Object@{scene\+::\+Object}!translate@{translate}}
+\index{translate@{translate}!scene\+::\+Object@{scene\+::\+Object}}
+\subsubsection{\texorpdfstring{translate()}{translate()}}
+{\footnotesize\ttfamily void scene\+::\+Object\+::translate (\begin{DoxyParamCaption}\item[{G\+Lfloat}]{x,  }\item[{G\+Lfloat}]{y,  }\item[{G\+Lfloat}]{z }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Desloca o objeto nas direções {\ttfamily x}, {\ttfamily y} e {\ttfamily z}. 
+\begin{DoxyParams}{Parameters}
+{\em x} & distância do deslocamento ao longo do eixo x. \\
+\hline
+{\em y} & distância do deslocamento ao longo do eixo y. \\
+\hline
+{\em z} & distância do deslocamento ao longo do eixo z. \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{classscene_1_1_object_a25c68d682b3620b0257f59db215ffe23}\label{classscene_1_1_object_a25c68d682b3620b0257f59db215ffe23}} 
+\index{scene\+::\+Object@{scene\+::\+Object}!ambient\+Reflection@{ambient\+Reflection}}
+\index{ambient\+Reflection@{ambient\+Reflection}!scene\+::\+Object@{scene\+::\+Object}}
+\subsubsection{\texorpdfstring{ambient\+Reflection}{ambientReflection}}
+{\footnotesize\ttfamily G\+Lfloat scene\+::\+Object\+::ambient\+Reflection\mbox{[}4\mbox{]}}
+
+Cor da reflexão difusa do objeto. \mbox{\Hypertarget{classscene_1_1_object_a4608ddd5375279ce31e1da48e9963759}\label{classscene_1_1_object_a4608ddd5375279ce31e1da48e9963759}} 
+\index{scene\+::\+Object@{scene\+::\+Object}!diffuse\+Reflection@{diffuse\+Reflection}}
+\index{diffuse\+Reflection@{diffuse\+Reflection}!scene\+::\+Object@{scene\+::\+Object}}
+\subsubsection{\texorpdfstring{diffuse\+Reflection}{diffuseReflection}}
+{\footnotesize\ttfamily G\+Lfloat scene\+::\+Object\+::diffuse\+Reflection\mbox{[}4\mbox{]}}
+
+Array de 16 elementos para preencherem uma matriz ordenada por linha. \mbox{\Hypertarget{classscene_1_1_object_ad0d064fc3da95f59e0fea3a39122e9c5}\label{classscene_1_1_object_ad0d064fc3da95f59e0fea3a39122e9c5}} 
+\index{scene\+::\+Object@{scene\+::\+Object}!shininess@{shininess}}
+\index{shininess@{shininess}!scene\+::\+Object@{scene\+::\+Object}}
+\subsubsection{\texorpdfstring{shininess}{shininess}}
+{\footnotesize\ttfamily G\+Lint scene\+::\+Object\+::shininess}
+
+Cor da reflexão especular do objeto. \mbox{\Hypertarget{classscene_1_1_object_ae584bfd42e862d486b31567c3f996773}\label{classscene_1_1_object_ae584bfd42e862d486b31567c3f996773}} 
+\index{scene\+::\+Object@{scene\+::\+Object}!specular\+Reflection@{specular\+Reflection}}
+\index{specular\+Reflection@{specular\+Reflection}!scene\+::\+Object@{scene\+::\+Object}}
+\subsubsection{\texorpdfstring{specular\+Reflection}{specularReflection}}
+{\footnotesize\ttfamily G\+Lfloat scene\+::\+Object\+::specular\+Reflection\mbox{[}4\mbox{]}}
+
+Cor da reflexão ambiente do objeto. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/\+Users/gilzamir/lab/cg/pgp/includes/scene.\+hpp\end{DoxyCompactItemize}

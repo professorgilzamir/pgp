@@ -167,6 +167,7 @@ int inicializar(void)
 		proxy->setAttribute("coord3d", cube_vertices, sizeof(cube_vertices));
 		proxy->setAttribute("texcoord", cube_textures, sizeof(cube_textures), 2);
 		proxy->setUniform1i("tex", 0);
+		proxy->setUniform1i("tex2", 1);
 		proxy->setElementPrimitive(cube_indices, sizeof(cube_indices));
 	} catch(string error) {
 		cout<<error<<endl;
@@ -174,19 +175,28 @@ int inicializar(void)
 	}
 
 
-	std::vector<unsigned char> image;
-	size_t s, t;
+	std::vector<unsigned char> image, image2;
+	size_t s, t, s2, t2;
 
 	try {
 		image = getTextureFromImage("texture.png", s, t);
+		image2 = getTextureFromImage("luzcentral.png", s2, t2);
 	} catch(string e) {
 		cout<<e<<endl;
 		return 0;
 	}
 
 	try {
-		proxy->setTexture(&image[0], s, t);
 		glActiveTexture(GL_TEXTURE0);
+		proxy->setTexture(&image[0], s, t);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+
+		glActiveTexture(GL_TEXTURE1);
+		proxy->setTexture(&image2[0], s, t);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
