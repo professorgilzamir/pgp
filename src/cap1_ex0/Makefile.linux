@@ -5,14 +5,14 @@ INCDIRS = -I../../includes
 CXXFLAGS=-Wall -g $(INCDIRS) -L../../lib
 BINDIR=../../bin
 
-SRCS=ex.cpp
+SRCS=hello.cpp
 OBJS=$(subst .cpp,.o,$(SRCS))
-BIN = ex
+BIN = hello
 
 all: $(BIN)
 
 $(BIN): $(OBJS)
-	$(CXX)  -o $(BIN) $(OBJS) lodepng.cpp $(LIBS) $(CXXFLAGS) ../../lib/libGLEW.a
+	$(CXX)  -o $(BIN) $(OBJS) $(LIBS) $(CXXFLAGS) ../../lib/libGLEW.a
 
 install: $(BIN)
 	mv $(BIN) $(BINDIR)/$(BIN)

@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_RGBA|GLUT_DOUBLE|GLUT_DEPTH);
   glutInitWindowSize(640, 480);
-  glutCreateWindow("Meu Primeiro Triangulo");
+  glutCreateWindow("Apenas uma Janela");
 
 
   /* Quando as funções de inicialização são executadas sem erros,
