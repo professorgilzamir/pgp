@@ -107,7 +107,7 @@ int main(int argc, char* argv[])
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGBA|GLUT_DOUBLE|GLUT_DEPTH);
 	glutInitWindowSize(width, height);
-	mainwindow = glutCreateWindow("Meu Primeiro objeto Minha Vida");
+	mainwindow = glutCreateWindow("Meu Primeiro Objeto Minha Vida");
 
 	const char* ver = (const char*)glGetString(GL_VERSION);
 	char major_number = ver[0];
@@ -116,11 +116,20 @@ int main(int argc, char* argv[])
 		return 0;
 	}
 	
+	#ifndef __APPLE__
+	GLenum glew_status = glewInit();
+  	if (glew_status != GLEW_OK)
+  	{
+    		fprintf(stderr, "Erro: %s\n", glewGetErrorString(glew_status));
+    		return EXIT_FAILURE;
+  	}
+    #endif
+	
 	/* Quando as funções de inicialização são executadas sem erros,
-	o programa pode iniciar os recursos */
+	o programa pode inicializar os recursos */
 	if (1 == inicializar())
 	{
-		/* Pode então mostrar se tudo correr bem */
+		/* Pode então mostrar se tudo ocorrer bem */
 		glutWMCloseFunc(fecharJanela);
 		glutDisplayFunc(atualizarTela);
 		glutMainLoop();

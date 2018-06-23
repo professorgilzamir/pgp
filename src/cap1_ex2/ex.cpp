@@ -135,6 +135,15 @@ int main(int argc, char* argv[])
 		return 0;
 	}
 	
+	#ifndef __APPLE__
+	GLenum glew_status = glewInit();
+  	if (glew_status != GLEW_OK)
+  	{
+    		fprintf(stderr, "Erro: %s\n", glewGetErrorString(glew_status));
+    		return EXIT_FAILURE;
+  	}
+    #endif
+	
 	/* Quando as funções de inicialização são executadas sem erros,
 	o programa pode iniciar os recursos */
 	if (1 == inicializar())
