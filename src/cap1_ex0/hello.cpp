@@ -9,9 +9,6 @@
 #include <GL/glut.h>
 #endif
 
-
-
-
 /* COLOCAREMOS AS VARIAVEIS GLOBAIS AQUI MAIS TARDE */
 
 int inicializar(void)
