@@ -28,8 +28,7 @@ namespace shaderutils {
 
     /**
     * Esta função lança uma exceção contendo informações do erro ocorrido, caso
-    * algum erro de compilação ou ligação de shader tenha ocorrido. Caso, nenhum
-    * erro de compilação ou de ligação de shader tenha ocorrido, a função não faz nada.
+    * algum erro de compilação ou ligação de shader tenha ocorrido.
     * @para GLuint target programa que está sendo compilado ou ligado.
     * @GLuint type tipo de shader (GL_VERTEX_SHADER ou GL_FRAGMENT_SHADER).
     */
@@ -326,7 +325,7 @@ namespace shaderutils {
                     GLenum mode = GL_STATIC_DRAW) {                
                     this->attributeBufferID[idx] = createVertexBuffer();
                     this->attributeSize[idx] = attributeSize;
-                    this->attributeIndexCounter[idx] = countBytes/sizeof(GLfloat);
+                    this->attributeIndexCounter[idx] = countBytes/(attributeSize*sizeof(GLfloat));
                     setVertexDataBuffer(this->attributeBufferID[idx], values, countBytes, mode);
             }
 
