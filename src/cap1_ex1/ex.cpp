@@ -29,7 +29,7 @@ ShaderProxy *proxy;
 
 /**
 *
-* Compila os shaders, monta o programa e cria buffers iniciais
+* Inicializa os recursos necessários (shaders e outros objetos).
 *
 */
 int inicializar(void)
@@ -56,18 +56,18 @@ int inicializar(void)
 
 /**
 *
-* Atualiza o desenho na tela de acordo com o modelo de cena atual.
+* Atualiza o desenho na tela de acordo com os dados passados aos shaders.
 *
 */
 void atualizarTela()
 {
-	glClearColor(1.0, 1.0, 1.0, 1.0);
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClearColor(1.0, 1.0, 1.0, 1.0); //define cor de fundo
+	glClear(GL_COLOR_BUFFER_BIT); //limpa a tela com a cor de fundo especificada na linha anterior
 	glEnable(GL_POINT_SMOOTH); //suavise as bordas do ponto
 	glEnable(GL_VERTEX_PROGRAM_POINT_SIZE); //permite alterar o tamanho dos pontos no vertex shader
-	proxy->useProgram();
-	proxy->drawArrays(GL_POINTS);
-	glutSwapBuffers();
+	proxy->useProgram(); //Definie o proxy como o programa atual.
+	proxy->drawArrays(GL_POINTS); //envia os comandos de renderização para o OpenGL inicializar a sua execucao.
+	glutSwapBuffers(); //troca os back buffer pelo front buffer
 }
 
 /**
