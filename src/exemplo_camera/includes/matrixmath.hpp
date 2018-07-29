@@ -241,6 +241,7 @@ namespace matrixmath {
 
 		out[0] = a0 * inv; out[1] = a1 * inv; out[2] = a2 * inv; out[3] = a3 * inv;
 		out[4] = a4 * inv; out[5] = a5 * inv; out[6] = a6 * inv; out[7] = a7 * inv;
+		out[8] = a8;
 
 		return true;
 	}
