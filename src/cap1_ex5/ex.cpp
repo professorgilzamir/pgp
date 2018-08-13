@@ -1,3 +1,4 @@
+
 /* Usando o padrão de saída fprintf */
 #include <cstdio>
 #include <cstdlib>
