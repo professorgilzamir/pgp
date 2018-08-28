@@ -23,6 +23,7 @@ using namespace shaderutils;
 const GLuint OBJ_RETANGULO = 0; //tipo de objeto geometrico
 const GLuint OBJ_CIRCULO = 1; //tipo de objeto geometrico
 const GLuint OBJ_ELIPSE = 2; //tipo de objeto geometrico
+const GLuint OBJ_GENERIC = 3;
 
 
 struct Objeto {
@@ -33,6 +34,9 @@ struct Objeto {
 	GLfloat altura;
 	GLfloat x;
 	GLfloat y;
+	GLenum primitive;
+	GLfloat pointSize;
+
 	Objeto(const GLuint &tipo, const vector<GLfloat> &pontos, const GLfloat &x, 
 			const GLfloat &y, const GLfloat &largura, const GLfloat &altura) {
 		this->tipo = tipo;
@@ -41,7 +45,20 @@ struct Objeto {
 		this->altura = altura;
 		this->x = x;
 		this->y = y;
+		this->pointSize = 1.0f;
+		this->primitive = GL_TRIANGLE_FAN;
 	}
+
+	Objeto(const GLuint &tipo, const vector<GLfloat> &pontos, GLfloat pointSize = 1.0f, GLenum primitive=GL_LINES) {
+		this->tipo = tipo;
+		this->pontos = pontos;
+		this->largura = 0.0f;
+		this->altura = 0.0f;
+		this->x = 0.0f;
+		this->y = 0.0f;
+		this->pointSize = pointSize;
+		this->primitive = primitive;
+	}	
 };
 
 //Objeto selecionado pelo usuario
@@ -125,6 +142,62 @@ vector<GLfloat> criar_retangulo(GLfloat dx, GLfloat dy, GLfloat largura, GLfloat
 	return pontos;
 }
 
+GLfloat* subarray(GLfloat a[], GLuint i, GLuint f) {
+	GLfloat *out = new GLfloat[f-i+1];
+	GLuint p = 0;
+	for (GLuint k = i; k < f; k++) {
+		out[p] = a[k];
+		p += 1;
+	}
+	return out;
+}
+
+void linter(GLfloat t, GLfloat p1[2], GLfloat p2[2],  GLfloat result[]) {
+	result[0] = (1-t) * p1[0] + t * p2[0];
+	result[1] = (1-t) * p1[1] + t * p2[1];
+}
+
+void genBezierPoint(GLfloat t, GLfloat points[], GLfloat out[2], GLuint nc) {
+	bool isFirst = true;		
+	if (nc == 2) {
+		GLfloat p1[2], p2[2];
+		p1[0] = points[0];
+		p1[1] = points[1];
+		p2[0] = points[2];
+		p2[1] = points[3];
+		linter(t, p1, p2, out);
+	} else {
+		GLfloat *a = subarray(points, 0, 2*(nc-1));
+		GLfloat *b = subarray(points, 2, 2*nc);
+		GLfloat out1[2];
+		GLfloat out2[2];
+		genBezierPoint(t, a, out1, nc-1);
+		genBezierPoint(t, b, out2, nc-1);
+		out[0] = (1-t) * out1[0] + t * out2[0];
+		out[1] = (1-t) * out1[1] + t * out2[1];
+		delete []a;
+		delete []b;
+	}
+}
+
+
+vector<GLfloat> genBezierCurve(GLfloat control[], GLuint nc, GLuint R) {
+	vector<GLfloat> out;
+	GLfloat step = 1.0f/R;
+	GLfloat p[2];
+	for (GLfloat t = 0.0f; t < 1.0; t += step) {
+		genBezierPoint(t, control, p, nc);
+		out.push_back(p[0]);
+		out.push_back(p[1]);
+		cout<<"("<<p[0]<<","<<p[1]<<endl;
+	}
+	genBezierPoint(1.0, control, p, nc);
+	out.push_back(p[0]);
+	out.push_back(p[1]);
+	
+	return out;
+}
+
 /**
 *
 * Configuracoes iniciais da aplicacao.
@@ -132,12 +205,26 @@ vector<GLfloat> criar_retangulo(GLfloat dx, GLfloat dy, GLfloat largura, GLfloat
 */
 int inicializar(void)
 {
-	vector<GLfloat> elipse = criar_elipse(0, 0, 0.5f, 0.2f);
+
+	GLfloat control[] = {0.0f, 0.0f, 0.25f,  0.25f, 0.5f, 0.0f, 0.75, 0.25};
+	GLuint nc = 4;
+	/*vector<GLfloat> elipse = criar_elipse(0, 0, 0.5f, 0.2f);
 	vector<GLfloat> circulo = criar_circulo(-0.5, -0.5, 0.1);
-	vector<GLfloat> retangulo = criar_retangulo(0.7f, 0.7f, 0.2f, 0.2f);
-	objetos.push_back(new Objeto(OBJ_ELIPSE, elipse, 0, 0, 0.5f, 0.2f));
-	objetos.push_back(new Objeto(OBJ_CIRCULO, circulo, -0.5f, -0.5f, 0.1f, 0.1f));
-	objetos.push_back(new Objeto(OBJ_RETANGULO, retangulo, 0.7f, 0.7f, 0.2f, 0.2f));
+	vector<GLfloat> retangulo = criar_retangulo(0.7f, 0.7f, 0.2f, 0.2f);*/
+	vector<GLfloat> bezier = genBezierCurve(control, nc, 100);
+	vector<GLfloat> controlpoints;
+	for (int i = 0; i < 2 * nc; i++) {
+		controlpoints.push_back(control[i]);
+	}
+
+	objetos.push_back(new Objeto(OBJ_GENERIC, controlpoints, 10.f, GL_POINTS));
+	objetos.push_back(new Objeto(OBJ_GENERIC, bezier, 1.0f, GL_LINE_STRIP));
+//	objetos.push_back(new Objeto(OBJ_ELIPSE, elipse, 0, 0, 0.5f, 0.2f));
+//	objetos.push_back(new Objeto(OBJ_CIRCULO, circulo, -0.5f, -0.5f, 0.1f, 0.1f));
+//	objetos.push_back(new Objeto(OBJ_RETANGULO, retangulo, 0.7f, 0.7f, 0.2f, 0.2f));
+	glEnable(GL_POINT_SMOOTH); //suavise as bordas do ponto
+	glEnable(GL_VERTEX_PROGRAM_POINT_SIZE); //permite alterar o tamanho dos pontos no vertex shader
+
 	try {
 		program = genProgram("shader.vs", "shader.fs");
 		proxy = new ShaderProxy(program);
@@ -148,11 +235,12 @@ int inicializar(void)
 	return 1;
 }
 
-void carregarObjeto(vector<GLfloat> &objeto){
+void carregarObjeto(vector<GLfloat> &objeto, GLfloat pointSize = 1.0f){
 	proxy->useProgram();
 	proxy->setAttribute("posicao", &objeto[0], objeto.size() * sizeof(GLfloat), 
 								coordenadasPorVertices);
 	proxy->setUniform4f("cor", 1.0f, 0.0f, 0.0f, 0.0f);
+	proxy->setUniform1f("pointSize", pointSize);
 	proxy->setUniformMatrix2fv("transformacoes", transformacoes, 1, GL_TRUE);
 }
 
@@ -165,13 +253,14 @@ void atualizarTela()
 {
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT);
+
 	if (proxy) {
 		try {
 			proxy->useProgram();
 			for (int i = 0; i < objetos.size(); i++){
 				vector<GLfloat> objeto = objetos[i]->pontos;
-				carregarObjeto(objeto);
-				proxy->drawArrays(GL_TRIANGLE_FAN);
+				carregarObjeto(objeto, objetos[i]->pointSize);
+				proxy->drawArrays(objetos[i]->primitive);
 			}
 		} catch(string error) {
 			cout<<error<<endl;
