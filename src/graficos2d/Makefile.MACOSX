@@ -1,0 +1,25 @@
+CXX=g++
+RM=rm -f
+LIBS = -framework GLUT -framework OpenGL
+INCDIRS = -I../../includes
+CXXFLAGS=-Wno-deprecated $(INCDIRS)
+BINDIR=../../bin
+
+SRCS=ex.cpp
+OBJS=$(subst .cpp,.o,$(SRCS))
+BIN = ex
+
+all: $(BIN)
+
+$(BIN): $(OBJS)
+	$(CXX)  -o $(BIN) $(OBJS) $(LIBS) $(CXXFLAGS)
+
+install: $(BIN)
+	mv $(BIN) $(BINDIR)
+
+clean:
+	$(RM) $(OBJS);\
+	$(RM) $(BIN);
+
+distclean: clean
+	$(RM) $(BINDIR)/$(BIN)
