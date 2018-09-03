@@ -94,8 +94,8 @@ vector<GLfloat> genCilindro(GLfloat dx, GLfloat dy, GLfloat dz, GLfloat h, GLflo
 	for (GLfloat t0 = -h; t0 <= h; t0 += z_step) {
 		for (GLfloat t1 = 0.0f; t1 <= 2*M_PI; t1 += xy_step) {
 			points.push_back(r*cos(t1)+dx);
-			points.push_back(r*sin(t1)+dy);
-			points.push_back(t0+dz);
+			points.push_back(t0+dy);
+			points.push_back(r*sin(t1)+dz);
 		}
 	}
 	return points;
@@ -216,7 +216,7 @@ vector<GLfloat> genBezierCurve(GLfloat control[], GLuint nc, GLuint R) {
 }
 
 //Propriedades da projecao perspectiva da camera
-GLfloat fov = 45.0; //fov = field of view ou angulo de abertura da camera
+GLfloat fov = 30.0; //fov = field of view ou angulo de abertura da camera
 GLfloat eye_position[3]; //Posicao da camera
 GLfloat eye_orientation[2]; //Orientacao da camera
 //MATRIZES QUE COMBINAM AS TRANSFORMACOES DE MODELO, CAMERA E PROJECAO : MODEL-VIEW-PROJECTION
@@ -236,6 +236,7 @@ int inicializar(void)
 
 	GLfloat aspect = (GLfloat)width/height;
 	perspective(projection, fov, aspect, 0.01f, 10000.0f);
+	//ortho(projection, -0.2f, 0.2, -0.2f, 0.2f, 0.02f, 100.0f);
 	identity(matrix);
 	identity(view);
 
@@ -256,7 +257,7 @@ int inicializar(void)
 //	objetos.push_back(new Objeto(OBJ_CIRCULO, circulo, -0.5f, -0.5f, 0.1f, 0.1f));
 //	objetos.push_back(new Objeto(OBJ_RETANGULO, retangulo, 0.7f, 0.7f, 0.2f, 0.2f));
 	
-	std::vector<GLfloat> cilindro = genCilindro(0, 0, -0.4, 1000.0f, 0.3f, 2000, 2000);
+	std::vector<GLfloat> cilindro = genCilindro(0, 0.0f, -1.0f, 0.1f, 0.05f, 50, 50);
 
 	objetos.push_back(new Objeto(OBJ_GENERIC, cilindro, 2.0f, GL_POINTS));
 
