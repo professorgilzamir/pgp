@@ -159,6 +159,17 @@ vector<GLfloat> criar_bezierEficiente(GLfloat controle[8], GLuint N){
 		resultado.push_back(x);
 		resultado.push_back(y);
 	}
+	GLfloat vt[4] = {1, 1, 1, 1};
+	GLfloat tmp[4];
+	transform(matrix, vt, tmp);
+	GLfloat x = tmp[0] * controle[0] + tmp[1] * controle[2] 
+		+  tmp[2] * controle[4] + tmp[3] * controle[6];
+
+	GLfloat y = tmp[0] * controle[1] + tmp[1] * controle[3] 
+		+  tmp[2] * controle[5] + tmp[3] * controle[7];
+
+	resultado.push_back(x);
+	resultado.push_back(y);
 	return resultado;
 }
 
@@ -246,7 +257,7 @@ int inicializar(void)
 	/*vector<GLfloat> elipse = criar_elipse(0, 0, 0.5f, 0.2f);
 	vector<GLfloat> circulo = criar_circulo(-0.5, -0.5, 0.1);
 	vector<GLfloat> retangulo = criar_retangulo(0.7f, 0.7f, 0.2f, 0.2f);*/
-	vector<GLfloat> bezierPoints = genBezierCurve(control, nc, 100);
+	vector<GLfloat> bezierPoints = criar_bezierEficiente(control, 100);
 	
 	vector<GLfloat> controlpoints;
 	
