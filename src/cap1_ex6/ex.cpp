@@ -1,9 +1,11 @@
+
 /* Usando o padrão de saída fprintf */
 #include <cstdio>
 #include <cstdlib>
 #include <cmath>
 #include <iostream>
 #include <vector>
+#include <string>
 
 /* Usando o GLUT com gerenciador de janelas */
 #include "matrixmath.hpp"
@@ -36,6 +38,7 @@ struct Objeto {
 	GLfloat y;
 	GLenum primitive;
 	GLfloat pointSize;
+	string name;
 
 	Objeto(const GLuint &tipo, const vector<GLfloat> &pontos, const GLfloat &x, 
 			const GLfloat &y, const GLfloat &largura, const GLfloat &altura) {
@@ -47,9 +50,10 @@ struct Objeto {
 		this->y = y;
 		this->pointSize = 1.0f;
 		this->primitive = GL_TRIANGLE_FAN;
+		this->name="Objeto";
 	}
 
-	Objeto(const GLuint &tipo, const vector<GLfloat> &pontos, GLfloat pointSize = 1.0f, GLenum primitive=GL_LINES) {
+	Objeto(const GLuint &tipo, const vector<GLfloat> &pontos, GLfloat pointSize = 1.0f, string name="Generico", GLenum primitive=GL_LINES) {
 		this->tipo = tipo;
 		this->pontos = pontos;
 		this->largura = 0.0f;
@@ -58,11 +62,15 @@ struct Objeto {
 		this->y = 0.0f;
 		this->pointSize = pointSize;
 		this->primitive = primitive;
+		this->name = name;
 	}	
 };
 
 //Objeto selecionado pelo usuario
-Objeto *selected = NULL;
+Objeto *controle = NULL;
+Objeto *bezier = NULL;
+GLfloat cx, cy;
+
 
 //Onde serao armazenados os objetos (conjunto de pontos) a serem desenhados.
 vector< Objeto* > objetos;
@@ -189,7 +197,7 @@ vector<GLfloat> genBezierCurve(GLfloat control[], GLuint nc, GLuint R) {
 		genBezierPoint(t, control, p, nc);
 		out.push_back(p[0]);
 		out.push_back(p[1]);
-		cout<<"("<<p[0]<<","<<p[1]<<endl;
+		//cout<<"("<<p[0]<<","<<p[1]<<endl;
 	}
 	genBezierPoint(1.0, control, p, nc);
 	out.push_back(p[0]);
@@ -211,14 +219,18 @@ int inicializar(void)
 	/*vector<GLfloat> elipse = criar_elipse(0, 0, 0.5f, 0.2f);
 	vector<GLfloat> circulo = criar_circulo(-0.5, -0.5, 0.1);
 	vector<GLfloat> retangulo = criar_retangulo(0.7f, 0.7f, 0.2f, 0.2f);*/
-	vector<GLfloat> bezier = genBezierCurve(control, nc, 100);
+	vector<GLfloat> bezierPoints = genBezierCurve(control, nc, 100);
+	
 	vector<GLfloat> controlpoints;
+	
 	for (int i = 0; i < 2 * nc; i++) {
 		controlpoints.push_back(control[i]);
 	}
 
-	objetos.push_back(new Objeto(OBJ_GENERIC, controlpoints, 10.f, GL_POINTS));
-	objetos.push_back(new Objeto(OBJ_GENERIC, bezier, 1.0f, GL_LINE_STRIP));
+	controle = new Objeto(OBJ_GENERIC, controlpoints, 10.f, "controle", GL_POINTS);
+	objetos.push_back(controle);
+	bezier = new Objeto(OBJ_GENERIC, bezierPoints, 1.0f, "bezier", GL_LINE_STRIP);
+	objetos.push_back(bezier);
 //	objetos.push_back(new Objeto(OBJ_ELIPSE, elipse, 0, 0, 0.5f, 0.2f));
 //	objetos.push_back(new Objeto(OBJ_CIRCULO, circulo, -0.5f, -0.5f, 0.1f, 0.1f));
 //	objetos.push_back(new Objeto(OBJ_RETANGULO, retangulo, 0.7f, 0.7f, 0.2f, 0.2f));
@@ -269,56 +281,53 @@ void atualizarTela()
 	glutSwapBuffers();
 }
 
+GLint pointSelected = -1;
 void tratarEventoDoMouse(int button, int state, int x, int y){
-		cout<<"Mouse state is "<< ( state == GLUT_DOWN ?  "DOWN" : "UP" ) << endl; 
-		cout<<"Mouse event on ("<<x<<","<<y<<") position of the screen!"<<endl; 
+		//cout<<"Mouse state is "<< ( state == GLUT_DOWN ?  "DOWN" : "UP" ) << endl; 
+		//cout<<"Mouse event on ("<<x<<","<<y<<") position of the screen!"<<endl; 
 		GLfloat xw = toXSRU(x, -1.0f, 1.0f);
 		GLfloat yw = toYSRU(y, -1.0f, 1.0f);
-		
 		if (state == GLUT_DOWN) {
-			for (int i = 0; i < objetos.size(); i++) {
-				Objeto *obj = objetos[i];
-				if (obj->tipo == OBJ_CIRCULO){
-					GLfloat cx = obj->x;
-					GLfloat cy = obj->y;
-					GLfloat r2 =  obj->largura * obj->largura;
-					GLfloat d2 = (xw - cx) * (xw - cx) + (yw - cy) * (yw-cy);
-					if (d2 <= r2){
-						selected = obj;
-					}
-				} else if (obj->tipo == OBJ_ELIPSE) {
-
-				} else if (obj->tipo == OBJ_RETANGULO) {
-
+			int idx = 0;
+			for (GLuint i = 0; i < controle->pontos.size()-1; i += 2){
+				GLfloat px = controle->pontos[i];
+				GLfloat py = controle->pontos[i+1];
+				GLfloat r2 =  0.05;
+				GLfloat d2 = (xw - px) * (xw - px) + (yw - py) * (yw-py);
+				cout<<d2<<endl;
+				cout<<r2<<endl;
+				if (d2 <= r2){
+					cout<<"PEGOU OOOOOOOOOOOOOOOOOO"<<endl;
+					cx = px;
+					cy = py;
+					pointSelected = idx;
 				}
+				idx ++;
 			}
 		} else if (state == GLUT_UP) {
-			selected = NULL;
+			pointSelected = -1;
 		}
 }
 
 void movimentoDoMouse(int x, int y) {
-	if (selected != NULL) {
+	if (pointSelected >= 0) {
 		GLfloat xw = toXSRU(x, -1.0f, 1.0f);
 		GLfloat yw = toYSRU(y, -1.0f, 1.0f);
 		
-		if (selected->tipo == OBJ_CIRCULO){
-			vector<GLfloat> circulo = criar_circulo(xw, yw, 0.1);
-			selected->pontos = circulo;
-			selected->x = xw;
-			selected->y = yw;
-		} else if (selected->tipo == OBJ_ELIPSE) {
-			//TODO
-		} else if (selected->tipo == OBJ_RETANGULO) {
-			//TODO
+		if (pointSelected >= 0){
+			controle->pontos[2 * pointSelected] = xw;
+			controle->pontos[2 * pointSelected + 1] = yw;
+			float *p = &controle->pontos[0];
+			vector<GLfloat> bezierPoints = genBezierCurve(p, 4, 100);
+			bezier->pontos = bezierPoints;
 		}
 		glutPostRedisplay();
 	}
 }
 
 void tratarEventoDoTeclado(unsigned char key, int x, int y){
-	cout<<"Key pressed: "<<key<<endl;
-	cout<<"Point: ("<<x<<", "<<y<<")"<<endl;
+	//cout<<"Key pressed: "<<key<<endl;
+	//cout<<"Point: ("<<x<<", "<<y<<")"<<endl;
 	transformacoes[0] += 0.1;
 	//transformacoes[3] += 0.1;
 	proxy->setUniformMatrix2fv("transformacoes", transformacoes);	
