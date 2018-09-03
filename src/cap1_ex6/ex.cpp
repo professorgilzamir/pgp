@@ -136,6 +136,33 @@ vector<GLfloat> criar_elipse(GLfloat dx, GLfloat dy, GLfloat a, GLfloat b, GLint
 	return dst;
 }
 
+vector<GLfloat> criar_bezierEficiente(GLfloat controle[8], GLuint N){
+	GLfloat matrix[16] = {
+		-1, 3, -3, 1,
+		 3, -6, 3, 0,
+		 -3, 3, 0, 0,
+		  1, 0, 0, 0
+	};
+
+	GLfloat step = 1.0f/N;
+	vector<GLfloat> resultado;
+	for (GLfloat t = 0; t < 1.0; t += step) {
+		GLfloat vt[4] = {t*t*t, t*t, t, 1};
+		GLfloat tmp[4];
+		transform(matrix, vt, tmp);
+		GLfloat x = tmp[0] * controle[0] + tmp[1] * controle[2] 
+		+  tmp[2] * controle[4] + tmp[3] * controle[6];
+
+		GLfloat y = tmp[0] * controle[1] + tmp[1] * controle[3] 
+		+  tmp[2] * controle[5] + tmp[3] * controle[7];
+
+		resultado.push_back(x);
+		resultado.push_back(y);
+	}
+	return resultado;
+}
+
+
 vector<GLfloat> criar_circulo(GLfloat dx, GLfloat dy, GLfloat radio, GLint numberOfPoints=100) {
 	return criar_elipse(dx, dy, radio, radio, numberOfPoints);
 }
