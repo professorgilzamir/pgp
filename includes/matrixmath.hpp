@@ -66,73 +66,6 @@ namespace matrixmath {
 		return m;
 	}
 
-	GLfloat* scaleMatrix4(GLfloat *m, GLfloat x, GLfloat y, GLfloat z) {
-		if (m == NULL) {
-			m = new GLfloat[16];
-		}
-		identity(m);
-		m[0] = x;
-		m[5] = y;
-		m[10] = z;
-		return m;
-	}
-
-	GLfloat* translationMatrix4(GLfloat *m, GLfloat x, GLfloat y, GLfloat z) {
-		if (m == NULL) {
-			m = new GLfloat[16];
-		}
-		identity(m);
-		m[3] = x;
-		m[7] = y;
-		m[11] = z;
-		return m;
-	}
-
-	GLfloat* rotationXMatrix4(GLfloat *m, GLfloat ang) {
-		if (m == NULL) {
-			m = new GLfloat[16];
-		}
-		GLfloat rang = TO_RADIANS * ang;
-
-		identity(m);
-
-		m[5] = cos(rang);
-		m[6] = -sin(rang);
-		m[9] = sin(rang);
-		m[10] = cos(rang);
-		return m;
-	}
-
-	GLfloat* rotationYMatrix4(GLfloat *m, GLfloat ang) {
-		if (m == NULL) {
-			m = new GLfloat[16];
-		}
-		GLfloat rang = TO_RADIANS * ang;
-
-		identity(m);
-
-		m[0] = cos(rang);
-		m[2] = sin(rang);
-		m[8] = -sin(rang);
-		m[10] = cos(rang);
-		return m;
-	}
-
-	GLfloat* rotationZMatrix4(GLfloat *m, GLfloat ang) {
-		if (m == NULL) {
-			m = new GLfloat[16];
-		}
-		GLfloat rang = TO_RADIANS * ang;
-
-		identity(m);
-
-		m[0] = cos(rang);
-		m[1] = -sin(rang);
-		m[4] = sin(rang);
-		m[5] = cos(rang);
-		return m;
-	}
-
 	GLfloat* multMatrix4(GLfloat b[16], GLfloat a[16], GLfloat *p) {
 		if (p == NULL) {
 			p = new GLfloat[16];
@@ -161,6 +94,95 @@ namespace matrixmath {
 		p[7] = p7; p[8] = p8; p[9] = p9; p[10] = p10; p[11] = p11; p[12] = p12;
 		p[13] = p13; p[14] = p14; p[15] = p15;
 		return p;
+	}
+
+	GLfloat* scaleMatrix4(GLfloat *t, GLfloat x, GLfloat y, GLfloat z) {
+		if (t == NULL) {
+			t = new GLfloat[16];
+			identity(t);
+		}
+		GLfloat m[16];
+		identity(m);
+		m[0] = x;
+		m[5] = y;
+		m[10] = z;
+		return multMatrix4(m, t, t);
+	}
+
+	GLfloat* translationMatrix4(GLfloat *t, GLfloat x, GLfloat y, GLfloat z) {
+		if (t == NULL) {
+			t = new GLfloat[16];
+			identity(t);
+		}
+		GLfloat m[16];
+		identity(m);
+		m[3] = x;
+		m[7] = y;
+		m[11] = z;
+		return multMatrix4(m, t, t);
+	}
+
+	GLfloat* rotationXMatrix4(GLfloat *t, GLfloat ang) {
+		if (t == NULL) {
+			t = new GLfloat[16];
+			identity(t);
+		}
+
+		GLfloat m[16];
+		identity(m);
+
+		GLfloat rang = TO_RADIANS * ang;
+
+		identity(m);
+
+		m[5] = cos(rang);
+		m[6] = -sin(rang);
+		m[9] = sin(rang);
+		m[10] = cos(rang);
+		multMatrix4(m, t, t);
+		return t;
+	}
+
+	GLfloat* rotationYMatrix4(GLfloat *t, GLfloat ang) {
+		if (t == NULL) {
+			t = new GLfloat[16];
+			identity(t);
+		}
+
+		GLfloat m[16];
+		identity(m);
+
+		GLfloat rang = TO_RADIANS * ang;
+
+		identity(m);
+
+		m[0] = cos(rang);
+		m[2] = sin(rang);
+		m[8] = -sin(rang);
+		m[10] = cos(rang);
+		multMatrix4(m, t, t);
+		return t;
+	}
+
+	GLfloat* rotationZMatrix4(GLfloat *t, GLfloat ang) {
+		if (t == NULL) {
+			t = new GLfloat[16];
+			identity(t);
+		}	
+
+		GLfloat m[16];
+		identity(m);
+
+		GLfloat rang = TO_RADIANS * ang;
+
+		identity(m);
+
+		m[0] = cos(rang);
+		m[1] = -sin(rang);
+		m[4] = sin(rang);
+		m[5] = cos(rang);
+		multMatrix4(m, t, t);
+		return t;
 	}
 
 	GLfloat* transposeMatrix4(GLfloat a[16], GLfloat *p) {

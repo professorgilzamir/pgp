@@ -235,8 +235,8 @@ int inicializar(void)
 {
 
 	GLfloat aspect = (GLfloat)width/height;
-	perspective(projection, fov, aspect, 0.01f, 10000.0f);
-	//ortho(projection, -0.2f, 0.2, -0.2f, 0.2f, 0.02f, 100.0f);
+	//perspective(projection, fov, aspect, 0.01f, 10000.0f);
+	ortho(projection, -0.2f, 0.2, -0.2f, 0.2f, 0.02f, 100.0f);
 	identity(matrix);
 	identity(view);
 
@@ -257,7 +257,8 @@ int inicializar(void)
 //	objetos.push_back(new Objeto(OBJ_CIRCULO, circulo, -0.5f, -0.5f, 0.1f, 0.1f));
 //	objetos.push_back(new Objeto(OBJ_RETANGULO, retangulo, 0.7f, 0.7f, 0.2f, 0.2f));
 	
-	std::vector<GLfloat> cilindro = genCilindro(0, 0.0f, -1.0f, 0.1f, 0.05f, 50, 50);
+	GLfloat ctl[8] = {0.0, 0.0, 0.25, 0.5, 0.5, 0.5, 0.75, 0.0};
+	std::vector<GLfloat> cilindro = genBezierCurve(ctl, 4, 100);
 
 	objetos.push_back(new Objeto(OBJ_GENERIC, cilindro, 2.0f, GL_POINTS));
 

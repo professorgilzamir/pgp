@@ -252,7 +252,7 @@ vector<GLfloat> genBezierCurve(GLfloat control[], GLuint nc, GLuint R) {
 int inicializar(void)
 {
 
-	GLfloat control[] = {0.0f, 0.0f, 0.25f,  0.25f, 0.5f, 0.0f, 0.75, 0.25};
+	GLfloat control[] = {0.0f, 0.0f, 0.5f, 0.5f, 0.25f,  0.5f, 0.75, 0.0};
 	GLuint nc = 4;
 	/*vector<GLfloat> elipse = criar_elipse(0, 0, 0.5f, 0.2f);
 	vector<GLfloat> circulo = criar_circulo(-0.5, -0.5, 0.1);
