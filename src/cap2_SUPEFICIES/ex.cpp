@@ -298,7 +298,7 @@ vector<GLfloat> genBezierSurfAsQuads(GLfloat control[4][4][3], GLuint N=200){
 }
 
 /*
-	Um facilitador paras duas funcoes anteriores. Permite ao usuario escolher o tipo de lista de
+	Um facilitador para as duas funcoes anteriores. Permite ao usuario escolher o tipo de lista de
 	pontos de acordo com o parametro primitive. Apenas dois valores de primitive sao permitidos:
 	GL_POINTS e GL_QUADS. Se vc passar algo diferente, os pontos vao ser gerados com a funcao
 	genBezierSurfAsQuads.
