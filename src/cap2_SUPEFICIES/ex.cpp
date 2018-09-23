@@ -490,7 +490,6 @@ void tratarEventoDoTeclado(unsigned char key, int x, int y){
 	rotationZMatrix4(matrix, viewrotz);
 	translationMatrix4(matrix, dx, dy, dz);
 	proxy->setUniformMatrix2fv("modelo", matrix);	
-	glutPostRedisplay();
 
 	glutPostRedisplay();
 }
