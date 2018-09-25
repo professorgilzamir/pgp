@@ -54,10 +54,11 @@ dos dois sistema operacionais suportados, faca:
 make clean
 
 
-****************************************************************************************************************
+****************************************************************************************************************/
 
-
-/* Usando o padrão de saída fprintf */
+/* 
+	Usando o padrão de saída fprintf
+*/
 #include <cstdio> //entrada e saida a moda antiga, do C.
 #include <cstdlib> //comandos do sistema a moda antiga, do C. Por exemplo, exit(0).
 #include <cmath> //comandos matematicos a moda antiga, do C. Por exemplo: sin(3.14/2.0) - calcula seno em radianos.
@@ -132,6 +133,10 @@ struct Objeto {
 	
 	GLuint nb_coordinates; //quantidade de coordenadas por vertice, em objetos planos esse valor deve ser 2. Em objetos espaciais, deve ser 3.
 
+	GLuint *indices;
+
+	GLuint nb_indices;
+
 	/**
 		Para construir um objeto plano especifico, use este construtor.
 	*/
@@ -146,7 +151,10 @@ struct Objeto {
 		this->pointSize = 1.0f;
 		this->nb_coordinates = 3;
 		this->primitive = GL_TRIANGLE_FAN;
+		this->indices = 0;
+		this->nb_indices = 0;
 	}
+
 
 	/**
 		Para construir um objeto generico, use este construtor.
@@ -161,7 +169,44 @@ struct Objeto {
 		this->pointSize = pointSize;
 		this->primitive = primitive;
 		this->nb_coordinates = 3;
-	}	
+		this->indices = 0;
+		this->nb_indices = 0;
+	}
+
+	/**
+		Para construir um objeto generico com array de pontos, use este construtor.
+	*/
+	Objeto(const GLuint &tipo, const GLfloat *pontos,  GLuint nb_pontos, GLfloat pointSize = 1.0f, GLenum primitive=GL_LINES) {
+		this->tipo = tipo;
+		for (int i = 0; i < nb_pontos; i++) {
+			this->pontos.push_back(pontos[i]);
+		}
+		this->largura = 0.0f;
+		this->altura = 0.0f;
+		this->x = 0.0f;
+		this->y = 0.0f;
+		this->pointSize = pointSize;
+		this->primitive = primitive;
+		this->nb_coordinates = 3;
+		this->indices = 0;
+		this->nb_indices = 0;
+	}
+
+	void set_indices(GLuint *indices, GLuint nb_indices) {
+		this->nb_indices = nb_indices;
+		this->indices = new GLuint[nb_indices];
+		for (int i = 0; i < nb_indices; i++) {
+			this->indices[i] = indices[i];
+		}
+	}
+
+
+	~Objeto() {
+		if (this->indices != 0){
+			delete [] this->indices;
+			this->indices = 0;
+		}
+	}
 };
 
 //Objeto selecionado pelo usuario
@@ -382,9 +427,35 @@ int inicializar(void)
 							{ 	{-0.2f, 0.2f, -0.5f}, {0.0f, 0.4f, -0.5f}, {0.2f, 0.4f, -0.5f}, {0.4f, 0.2f, -0.5f} },
 							{ 	{-0.2f, 0.0f, -0.8f}, {0.0f, 0.2f, -0.8f}, {0.2f, 0.2f, -0.8f}, {0.4f, 0.0f, -0.8f} } };
 
-	std::vector<GLfloat> surf = genBezierSurf(ctl, 20, GL_QUADS);
+	std::vector<GLfloat> surf = genBezierSurf(ctl, 200, GL_POINTS);
 
-	objetos.push_back(new Objeto(OBJ_GENERIC, surf, 2.0f, GL_QUADS));
+	GLfloat cubo_vertices[24] = 
+	{
+		 0.1, -0.1,   -0.5, //0
+		 0.1,  0.1,   -0.5, //1
+		-0.1,  0.1,   -0.5, //2
+		-0.1, -0.1,   -0.5, //3
+		-0.1, -0.1,  -0.7, //4
+		-0.1,  0.1,  -0.7, //5
+		 0.1,  0.1,  -0.7, //6
+		 0.1, -0.1,  -0.7, //7
+	};
+
+	GLuint cubo_faces[24] = {
+		0, 1, 2, 3, //Face Fontal
+		4, 5, 6, 7, //Face Traseira
+		1, 6, 5, 2, //Face de Cima
+		0, 3, 4, 7, //Face de Baixo
+		2, 5, 4, 3, //Face da Esquerda
+		7, 6, 1, 0, //Face da Direita 
+	};
+
+	Objeto *cubo = new Objeto(OBJ_GENERIC, cubo_vertices, 24, 1.0f, GL_QUADS);
+	cubo->set_indices(cubo_faces, 24);
+
+
+	objetos.push_back(cubo);
+	objetos.push_back(new Objeto(OBJ_GENERIC, surf, 2.0f, GL_POINTS));
 
 	glEnable(GL_POINT_SMOOTH); //suavise as bordas do ponto
 	glEnable(GL_VERTEX_PROGRAM_POINT_SIZE); //permite alterar o tamanho dos pontos no vertex shader
@@ -427,7 +498,13 @@ void atualizarTela()
 			for (int i = 0; i < objetos.size(); i++){
 				vector<GLfloat> objeto = objetos[i]->pontos;
 				carregarObjeto(objeto, objetos[i]->pointSize, objetos[i]->nb_coordinates);
-				proxy->drawArrays(objetos[i]->primitive);
+				if (objetos[i]->indices == 0) {
+					proxy->drawArrays(objetos[i]->primitive);
+				} else {
+					proxy->setElementPrimitive(objetos[i]->indices, objetos[i]->nb_indices * sizeof(GLuint),
+                        objetos[i]->primitive, GL_STATIC_DRAW);
+					proxy->drawElements();
+				}
 			}
 		} catch(string error) {
 			cout<<error<<endl;
