@@ -73,10 +73,15 @@ GLuint width = 640, height = 480;
 
 void initializeMatrix() {
 	//ortho(proj, -100, 100, -100, 100, 0.0001, 1000.0);
+	identity(proj);
+	identity(matrix);
+	identity(rotx45);
+	identity(translation);
+	identity(scale);
 	GLfloat aspect = (GLfloat)width/height;
 	perspective(proj, 45.0f, aspect, 0.01f, 1000.0f);
 	scaleMatrix4(scale,  20, 20, 20);
-	translationMatrix4(translation, 0, 0, -100.0f);
+	translationMatrix4(translation, 0, 0, -20.01f);
 }
 
 void updateMatrix() {
@@ -109,6 +114,7 @@ int inicializar(void)
 	
 	try {
 		proxy->useProgram();
+		cout<<sizeof(cube_vertices)<<endl;
 		proxy->setAttribute("coord3d", cube_vertices, sizeof(cube_vertices));
 		proxy->setAttribute("color3d", cube_colors, sizeof(cube_colors));
 		proxy->setElementPrimitive(cube_indices, sizeof(cube_indices));
