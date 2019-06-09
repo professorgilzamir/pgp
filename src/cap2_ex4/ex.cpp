@@ -22,7 +22,6 @@ using namespace std;
 using namespace matrixmath;
 using namespace shaderutils;
 
-GLfloat fov = 45.0 * TO_RADIANS;
 GLfloat rot = 0.0f;
 GLfloat rotInc = 11.0f;
 

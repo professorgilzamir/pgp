@@ -38,11 +38,14 @@ GLuint width = 640, height = 480;
 ShaderProxy *proxy = 0;
 Camera *camera = 0;
 ShadedObject *object = 0;
-GLfloat eye_orientation[2] = {0.0f, 0.0f};
+GLfloat eye_orientation[2];
 GLfloat normais[esferoide_countVertices*3];
 
 
 void initializeMatrix() {
+	eye_orientation[0] = 0.0f;
+	eye_orientation[1] = 0.0f;
+
 	camera->setPerspective(45.0, width/(float)height, 0.0001f, 10000.0f);
 	object->data.translate(0, 0, -10);
 }
@@ -78,7 +81,7 @@ int inicializar(void)
 
 	object->data.setDiffuseReflection(0.8f, 0.0f, 0.0f, 1.0f);
 	object->data.setAmbientReflection(0.4f, 0.4f, 0.4f, 1.0f);
-	object->data.setSpecularReflection(1.0f, 1.0f, 1.0f, 1.0f, 0.0f);
+	object->data.setSpecularReflection(1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
 
 	updateMatrix();
 	

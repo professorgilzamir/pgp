@@ -83,13 +83,23 @@ GLuint width = 640, height = 480;
 void initializeMatrix() {
 	//ortho(projection, -100, 100, -100, 100, 0.0001, 1000.0);
 
+	eye_position[0] = 0.0f;
+	eye_position[1] = 0.0f;
+	eye_position[2] = 0.0f;
+
+	eye_orientation[0] = 0.0f;
+	eye_orientation[1] = 0.0f;
+
 	identity(model);
+	identity(translation);
+	identity(scale);
 
 	GLfloat aspect = (GLfloat)width/height;
-	perspective(projection, fov, aspect, 0.01f, 10000.0f);
+	perspective(projection, fov, aspect, 0.01f, 1000.0f);
 
 	scaleMatrix4(scale,  20, 20, 20);
 	translationMatrix4(translation, 0, 0, -200);
+
 	multMatrix4(model, translation, model);
 	multMatrix4(model, scale, model);
 }
@@ -101,6 +111,9 @@ void updateMatrix() {
 
 	GLfloat rotViewX[16];
 	GLfloat rotViewY[16];
+
+	identity(rotViewX);
+	identity(rotViewY);
 
 	rotationXMatrix4(rotViewX, eye_orientation[0]);
 	rotationYMatrix4(rotViewY, eye_orientation[1]);
@@ -131,9 +144,11 @@ int inicializar(void)
 	const GLuint QTD_ATRIBUTOS = 2;
 
 	proxy = new ShaderProxy(program, QTD_ATRIBUTOS);
-	
+	initializeMatrix();
+	updateMatrix();
 	try {
 		proxy->useProgram();
+
 		proxy->setAttribute("coord3d", cube_vertices, sizeof(cube_vertices));
 		proxy->setAttribute("color3d", cube_colors, sizeof(cube_colors));
 		proxy->setElementPrimitive(cube_indices, sizeof(cube_indices));
@@ -143,8 +158,7 @@ int inicializar(void)
 		return 0;
 	}
 
-	initializeMatrix();
-	updateMatrix();
+	
 	return 1;
 }
 

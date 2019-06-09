@@ -133,8 +133,9 @@ namespace scene {
 			*/
 			void translate(GLfloat x, GLfloat y, GLfloat z) {
 				GLfloat translation[16];
+				identity(translation);
 				translationMatrix4(translation, x, y, z);
-				multMatrix4(transform,  translation, transform);
+				multMatrix4(this->transform,  translation, this->transform);
 			}
 
 			/**
@@ -219,8 +220,9 @@ namespace scene {
 			*/
 			void scale(GLfloat x, GLfloat y, GLfloat z) {
 				GLfloat t[16];
+				identity(t);
 				scaleMatrix4(t, x, y, z);
-				multMatrix4(transform, t, transform);
+				multMatrix4(this->transform, t, this->transform);
 			}
 
 			/**
@@ -373,6 +375,7 @@ namespace scene {
 			*/
  			void translate(GLfloat dx, GLfloat dy, GLfloat dz) {
  				GLfloat t[16];
+ 				identity(t);
  				translationMatrix4(t, dx, dy, dz);
  				multMatrix4(t, view, view);
  			}
@@ -384,6 +387,7 @@ namespace scene {
 			*/
  			void rotateX(GLfloat ang) {
 				GLfloat t[16];
+				identity(t);
  				rotationXMatrix4(t, ang);
  				multMatrix4(t, view, view);
  			}
@@ -395,6 +399,7 @@ namespace scene {
 			*/
  			void rotateY(GLfloat ang) {
 				GLfloat t[16];
+				identity(t);
  				rotationYMatrix4(t, ang);
  				multMatrix4(t, view, view);
  			}
@@ -407,6 +412,7 @@ namespace scene {
 			*/
  			void rotateZ(GLfloat ang) {
 				GLfloat t[16];
+				identity(t);
  				rotationZMatrix4(t, ang);
  				multMatrix4(t, view, view);
  			}

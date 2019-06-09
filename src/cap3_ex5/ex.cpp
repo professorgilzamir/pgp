@@ -66,7 +66,18 @@ GLfloat normais[esferoide_countVertices*3];
 */
 void initializeMatrix() {
 	//ortho(projection, -100, 100, -100, 100, 0.0001, 1000.0);
+	
+	eye_position[0] = 0.0f;
+	eye_position[1] = 0.0f;
+	eye_position[2] = 0.0f;
+
+	eye_orientation[0] = 0.0f;
+	eye_orientation[1] = 0.0f;
+
 	identity(model);
+	identity(scale);
+	identity(translation);
+
 	GLfloat aspect = (GLfloat)width/height;
 	perspective(projection, fov, aspect, 0.01f, 10000.0f);
 
@@ -89,6 +100,9 @@ void updateMatrix() {
 
 	GLfloat rotViewX[16];
 	GLfloat rotViewY[16];
+
+	identity(rotViewX);
+	identity(rotViewY);
 
 	rotationXMatrix4(rotViewX, eye_orientation[0]);
 	rotationYMatrix4(rotViewY, eye_orientation[1]);
