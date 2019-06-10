@@ -160,6 +160,12 @@ namespace scene {
 				multMatrix4(transform, t, transform);
 			}
 
+			void getPosition(GLfloat pos[]){
+				pos[0] = this->transform[3];
+				pos[1] = this->transform[7];
+				pos[2] = this->transform[11];
+			}
+
 			/**
 			* Rotaciona o objeto em torno do eixo Z em um ângulo de Euler
 			* igual ao valor no parâmetro <code>ang</code>.

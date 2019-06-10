@@ -263,7 +263,7 @@ namespace matrixmath {
 
 		out[0] = a0 * inv; out[1] = a1 * inv; out[2] = a2 * inv; out[3] = a3 * inv;
 		out[4] = a4 * inv; out[5] = a5 * inv; out[6] = a6 * inv; out[7] = a7 * inv;
-		out[8] = a8;
+		out[8] = a8 * inv;
 
 		return true;
 	}
@@ -283,6 +283,36 @@ namespace matrixmath {
 		submatrix[8] = matrix[10];
 	}
 
+	void copySubMatrixInMatrix4(GLfloat matrix[16], GLfloat submatrix[9]) {
+		matrix[0] = submatrix[0];
+		matrix[1] = submatrix[1];
+		matrix[2] = submatrix[2];
+
+		matrix[4] = submatrix[3];
+		matrix[5] = submatrix[4];
+		matrix[6] = submatrix[5];
+
+		matrix[8] = submatrix[6];
+		matrix[9] = submatrix[7];
+		matrix[10] = submatrix[8];	
+	}
+
+
+	GLfloat* transform3(GLfloat matrix[9], GLfloat vertex[3], GLfloat *out) {
+		if (out == NULL) {
+			out = new float[3];
+		}
+		GLfloat out0 = matrix[0] * vertex[0] + matrix[1] * vertex[1] + matrix[2] * vertex[2];
+		GLfloat out1 = matrix[3] * vertex[0] + matrix[4] * vertex[1] + matrix[5] * vertex[2];
+		GLfloat out2 = matrix[6] * vertex[0] + matrix[7] * vertex[1] + matrix[8] * vertex[2];
+		
+		out[0] = out0;
+		out[1] = out1;
+		out[2] = out2;
+
+		return out;
+	}
+
 	GLfloat* transform(GLfloat matrix[16], GLfloat vertex[4], GLfloat *out) {
 		if (out == NULL) {
 			out = new float[4];
@@ -299,12 +329,46 @@ namespace matrixmath {
 		return out;
 	}
 
+	GLfloat* getViewInverse(GLfloat matrix[16], GLfloat *out){ 
+			if (out == NULL) {
+				out = new float[16];
+			}
+			identity(out);
+			GLfloat submatrix[9];
+			subMatrix3FromMatrix4(matrix, submatrix);
+			transposeMatrix3(submatrix, submatrix);
+			copySubMatrixInMatrix4(out, submatrix);
 
-	void __insertVec3(GLfloat vertices[], GLuint pos, GLfloat vec[3]){
-		GLuint fpos = 3 * pos;
-		vertices[fpos] = vec[0];
-		vertices[fpos] = vec[1];
-		vertices[fpos] = vec[2];
+			GLfloat v[3];
+
+			v[0] = matrix[3];
+			v[1] = matrix[7];
+			v[2] = matrix[11];
+
+			transform3(submatrix, v, v);
+
+			out[3] = -v[0];
+			out[7] = -v[1];
+			out[11] = -v[2];
+			out[12] = 0.0f;
+			out[13] = 0.0f;
+			out[14] = 0.0f;
+			out[15] = 1.0f;
+			return out;
 	}
 
+	GLfloat* getProjectionInverse(GLfloat matrix[16], GLfloat *out){
+			if (out == NULL) {
+				out = new float[16];
+			}
+			identity(out);
+
+			out[0] = 1.0f/matrix[0];
+			out[5] = 1.0f/matrix[5];
+			out[10] = 0.0f;
+			out[11] = 1.0f/matrix[14]; 
+			out[14] = 1.0f/matrix[11];
+			out[15] = -matrix[10]/(matrix[11] * matrix[14]);
+			return out;
+	}
 }
