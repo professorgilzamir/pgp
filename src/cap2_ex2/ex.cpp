@@ -10,6 +10,7 @@
 #include <iostream>
 
 #include "shaderutils.hpp"
+#include "matrixmath.hpp"
 
 /* Usando o GLUT com gerenciador de janelas */
 #ifdef __APPLE__
@@ -21,6 +22,7 @@
 
 using namespace std;
 using namespace shaderutils;
+using namespace matrixmath;
 
 GLfloat triangulo_vertices[] = {
 	0.0, 0.8,
@@ -44,12 +46,69 @@ ShaderProxy *proxy;
 
 void atualizarDesenho();
 
+bool inTriangle(float t[], float x, float y){
+	float u[3], v[3], w[3], k[3], l[3];
+	u[0] = t[2] - t[0];
+	u[1] = t[3] - t[1];
+	u[2] = 0.0f;
+	v[0] = t[4] - t[2];
+	v[1] = t[5] - t[3];
+	v[2] = 0.0;
+	w[0] = t[0] - t[4];
+	w[1] = t[1] - t[5];
+	w[2] = 0.0;
+
+	float rightside = 1;
+
+	k[0] = x - t[0];
+	k[1] = y - t[1];
+	k[2] = 0;
+	crossproduct(u, k, l);
+	rightside = l[2];
+	k[0] = x - t[2];
+	k[1] = y - t[3]; 
+	crossproduct(v, k, l);
+	if (rightside * l[2] <  0) {
+		return false;
+	}
+	rightside = l[2];
+	k[0] = x - t[4];
+	k[1] = y - t[5];
+	crossproduct(w, k, l);
+	if (rightside * l[2] < 0) {
+		return false;
+	}
+	return true;
+}
+
+
 void onMouseClick(GLint buttom, GLint state, GLint x, GLint y){
-	alfa += 0.1;
-	transformacao[0] = cos(alfa);
-	transformacao[1] = -sin(alfa);
-	transformacao[2] = sin(alfa);
-	transformacao[3] = cos(alfa);
+
+	if (state == GLUT_DOWN){
+		return;
+	}
+	
+	float f[2];
+	f[0] = 2.0f * x/640.0f - 1.0f;
+	f[1] = 1.0 -  2.0f*y/480.0f;
+
+
+	GLfloat tt[4];
+	inverse2(transformacao, tt);
+	transform2(tt, f, f);
+
+	if (inTriangle(triangulo_vertices, f[0], f[1]) ) {
+		alfa += 0.01;
+		transformacao[0] = cos(alfa);
+		transformacao[1] = -sin(alfa);
+		transformacao[2] = sin(alfa);
+		transformacao[3] = cos(alfa);
+		cout<<"DENTRO"<<endl;
+	} else {
+		cout<<"FORA"<<endl;
+	}
+
+
 	glutPostRedisplay();
 }
 
