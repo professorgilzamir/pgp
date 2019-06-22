@@ -23,7 +23,7 @@ using namespace matrixmath;
 using namespace shaderutils;
 
 GLfloat rot = 0.0f;
-GLfloat rotInc = 11.0f;
+GLfloat rotInc = 1.0f;
 
 ShaderProxy *proxy = 0;
 
@@ -80,7 +80,7 @@ void initializeMatrix() {
 	GLfloat aspect = (GLfloat)width/height;
 	perspective(proj, 45.0f, aspect, 0.01f, 1000.0f);
 	scaleMatrix4(scale,  20, 20, 20);
-	translationMatrix4(translation, 0, 0, -20.01f);
+	translationMatrix4(translation, 0, 0, -200.01f);
 }
 
 void updateMatrix() {
