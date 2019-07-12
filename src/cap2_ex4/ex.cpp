@@ -118,6 +118,8 @@ int inicializar(void)
 		proxy->setAttribute("color3d", cube_colors, sizeof(cube_colors));
 		proxy->setElementPrimitive(cube_indices, sizeof(cube_indices));
 		proxy->setUniformMatrix4fv("matrix", matrix, 1, GL_TRUE);
+		glEnable(GL_LINE_SMOOTH);
+		glEnable(GL_POINT_SMOOTH);
 	} catch(string error) {
 		cout<<error<<endl;
 		return 0;
@@ -166,6 +168,17 @@ void rotate(unsigned char key, int x, int y) {
 	}
 }
 
+void atualizarFormaDaTela(int w, int h){
+	width = w;
+	height = h;
+	glViewport(0, 0, w, h);
+	identity(proj);
+	GLfloat aspect = (GLfloat)width/height;
+	perspective(proj, 45.0f, aspect, 0.01f, 1000.0f);
+	updateMatrix();
+	glutPostRedisplay();
+}
+
 int main(int argc, char* argv[])
 {
 	/* Funções necessárias para iniciar a GLUT */
@@ -201,6 +214,7 @@ int main(int argc, char* argv[])
 	{
 		/* Pode então mostrar se tudo correr bem */
 		glutWMCloseFunc(fecharJanela);
+		glutReshapeFunc(atualizarFormaDaTela);
 		glutDisplayFunc(atualizarDesenho);
 		glutKeyboardFunc(rotate);
 		glutMainLoop();
