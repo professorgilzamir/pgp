@@ -34,6 +34,10 @@ struct Objeto {
 	GLfloat altura;
 	GLfloat x;
 	GLfloat y;
+	GLfloat R;
+	GLfloat G;
+	GLfloat B;
+	GLfloat A;
 	GLenum primitive;
 	GLfloat pointSize;
 
@@ -47,6 +51,10 @@ struct Objeto {
 		this->y = y;
 		this->pointSize = 1.0f;
 		this->primitive = GL_TRIANGLE_FAN;
+		this->R = 0.0f;
+		this->G = 0.0f;
+		this->B = 0.0f;
+		this->A = 1.0f;
 	}
 
 	Objeto(const GLuint &tipo, const vector<GLfloat> &pontos, GLfloat pointSize = 1.0f, GLenum primitive=GL_LINES) {
@@ -58,6 +66,10 @@ struct Objeto {
 		this->y = 0.0f;
 		this->pointSize = pointSize;
 		this->primitive = primitive;
+		this->R = 0.0f;
+		this->G = 0.0f;
+		this->B = 0.0f;
+		this->A = 1.0f;
 	}	
 };
 
@@ -68,7 +80,7 @@ Objeto *selected = NULL;
 vector< Objeto* > objetos;
 
 //Quantidade de coordenadas por vertice. Como estamos utilizando 2D, precisamos de duas coordenadas.
-const GLuint coordenadasPorVertices=3;
+const GLuint coordenadasPorVertices=2;
 
 //VARIAVEIS UTILIZADAS NO MAPEAMENTO DE DADOS DO PROGRAMA PARA OS SHADERS
 GLuint program; //ID do programa, lembrando que um programa aqui eh a combinacao de vertex com fragment shader
@@ -76,30 +88,9 @@ GLuint program; //ID do programa, lembrando que um programa aqui eh a combinacao
 int mainwindow=-1; //ID da janela de visualizacao criada pelo GLUT
 GLuint width = 640, height = 480; //dimensoes da janela 
 
-//Matriz que representa uma transformacao 2D
-GLfloat transformacoes[] = {
-	1.0f, 0.0f,
-	0.0f, 1.0f
-};
-
 
 //Ponteiro para objeto que faz a comunicacao entre C++ e os shaders
 ShaderProxy *proxy;
-
-
-vector<GLfloat> genCilindro(GLfloat dx, GLfloat dy, GLfloat dz, GLfloat h, GLfloat r, GLuint M=100, GLuint N=100){
-	GLfloat xy_step = 2.0f*M_PI/M;
-	GLfloat z_step = 2.0f*h/N;
-	vector<GLfloat> points;
-	for (GLfloat t0 = -h; t0 <= h; t0 += z_step) {
-		for (GLfloat t1 = 0.0f; t1 <= 2*M_PI; t1 += xy_step) {
-			points.push_back(r*cos(t1)+dx);
-			points.push_back(t0+dy);
-			points.push_back(r*sin(t1)+dz);
-		}
-	}
-	return points;
-}
 
 
 //INICIO DAS FUNCOES DE MAPEAMENTO ENTRE COORDENADAS DO UNIVERSO E COORDENADAS DA TELA
@@ -132,16 +123,20 @@ vector<GLfloat> criar_elipse(GLfloat dx, GLfloat dy, GLfloat a, GLfloat b, GLint
 	vector<GLfloat> dst;
 	GLfloat x = 0.0f, y = 0.0f;
 	adicionarPonto(dst, x+dx, y+dy);
-	x = a * 1.0 + dx;
 	GLfloat theta = 0.0f;
 	GLfloat MAX = 2.0f * M_PI;
-	GLfloat step = MAX/numberOfPoints;
-	for (;theta <= MAX; theta += step) {
+	GLfloat step = MAX/(numberOfPoints);
+	cout<<step<<endl;
+	for (;theta < MAX; theta += step) {
 		x = a * cos(theta) + dx;
 		y = b * sin(theta) + dy;
+		cout<<theta<<endl;
 		adicionarPonto(dst, x, y);
 	}
-	adicionarPonto(dst, a * 1.0f + dx, dy);
+	adicionarPonto(dst, a * cos(0.0f) + dx, b * sin(0.0f) + dy);
+	for (uint i = 0; i < dst.size()-1; i += 2){
+		cout<<dst[i]<<", "<<dst[i+1]<<endl;
+	}
 	return dst;
 }
 
@@ -233,18 +228,18 @@ GLfloat matrix[16]; //contem o produto projection * view * model
 */
 int inicializar(void)
 {
-
 	GLfloat aspect = (GLfloat)width/height;
 	//perspective(projection, fov, aspect, 0.01f, 10000.0f);
-	ortho(projection, -0.2f, 0.2, -0.2f, 0.2f, 0.02f, 100.0f);
+	ortho(projection, -2.0f, 2.0f, -2.0f, 2.0f, 0.001f, 100.0f);
 	identity(matrix);
 	identity(view);
 
+
 	//GLfloat control[] = {0.0f, 0.0f, 0.25f,  0.25f, 0.5f, 0.0f, 0.75, 0.25};
 	//GLuint nc = 4;
-	/*vector<GLfloat> elipse = criar_elipse(0, 0, 0.5f, 0.2f);
-	vector<GLfloat> circulo = criar_circulo(-0.5, -0.5, 0.1);
-	vector<GLfloat> retangulo = criar_retangulo(0.7f, 0.7f, 0.2f, 0.2f);*/
+	//vector<GLfloat> elipse = criar_elipse(0, 0, 0.5f, 0.2f);
+	//vector<GLfloat> circulo = criar_circulo(0.0f, 0.0f, 0.2, 4);
+	//vector<GLfloat> retangulo = criar_retangulo(0.7f, 0.7f, 0.2f, 0.2f);*/
 	//vector<GLfloat> bezier = genBezierCurve(control, nc, 100);
 	//vector<GLfloat> controlpoints;
 	//for (int i = 0; i < 2 * nc; i++) {
@@ -253,18 +248,16 @@ int inicializar(void)
 
 	//objetos.push_back(new Objeto(OBJ_GENERIC, controlpoints, 10.f, GL_POINTS));
 	//objetos.push_back(new Objeto(OBJ_GENERIC, bezier, 1.0f, GL_LINE_STRIP));
-//	objetos.push_back(new Objeto(OBJ_ELIPSE, elipse, 0, 0, 0.5f, 0.2f));
-//	objetos.push_back(new Objeto(OBJ_CIRCULO, circulo, -0.5f, -0.5f, 0.1f, 0.1f));
-//	objetos.push_back(new Objeto(OBJ_RETANGULO, retangulo, 0.7f, 0.7f, 0.2f, 0.2f));
+	//objetos.push_back(new Objeto(OBJ_ELIPSE, elipse, 0, 0, 0.5f, 0.2f));
+	//objetos.push_back(new Objeto(OBJ_CIRCULO, circulo, 0.0f, 0.0f, 0.2f, 0.2f));
+	//objetos.push_back(new Objeto(OBJ_RETANGULO, retangulo, 0.7f, 0.7f, 0.2f, 0.2f));
 	
 	GLfloat ctl[8] = {0.0, 0.0, 0.25, 0.5, 0.5, 0.5, 0.75, 0.0};
-	std::vector<GLfloat> cilindro = genBezierCurve(ctl, 4, 100);
-
-	objetos.push_back(new Objeto(OBJ_GENERIC, cilindro, 2.0f, GL_POINTS));
-
+	std::vector<GLfloat> curve = genBezierCurve(ctl, 4, 100);
+	objetos.push_back(new Objeto(OBJ_GENERIC, curve, 1.0f, GL_POINTS));
+	
 	glEnable(GL_POINT_SMOOTH); //suavise as bordas do ponto
 	glEnable(GL_VERTEX_PROGRAM_POINT_SIZE); //permite alterar o tamanho dos pontos no vertex shader
-
 
 	try {
 		program = genProgram("shader.vs", "shader.fs");
@@ -280,9 +273,9 @@ void carregarObjeto(vector<GLfloat> &objeto, GLfloat pointSize = 1.0f){
 	proxy->useProgram();
 	proxy->setAttribute("posicao", &objeto[0], objeto.size() * sizeof(GLfloat), 
 								coordenadasPorVertices);
-	proxy->setUniform4f("cor", 1.0f, 0.0f, 0.0f, 0.0f);
+	proxy->setUniform4f("cor", 1.0f, 0.0f, 0.0f, 1.0f);
 	proxy->setUniform1f("pointSize", pointSize);
-	proxy->setUniformMatrix4fv("transformacoes", projection, 1, GL_TRUE);
+	proxy->setUniformMatrix4fv("transformacoes", projection, 1, GL_FALSE);
 }
 
 /**
@@ -344,10 +337,7 @@ void movimentoDoMouse(int x, int y) {
 		GLfloat yw = toYSRU(y, -1.0f, 1.0f);
 		
 		if (selected->tipo == OBJ_CIRCULO){
-			vector<GLfloat> circulo = criar_circulo(xw, yw, 0.1);
-			selected->pontos = circulo;
-			selected->x = xw;
-			selected->y = yw;
+			//TODO
 		} else if (selected->tipo == OBJ_ELIPSE) {
 			//TODO
 		} else if (selected->tipo == OBJ_RETANGULO) {
@@ -360,9 +350,7 @@ void movimentoDoMouse(int x, int y) {
 void tratarEventoDoTeclado(unsigned char key, int x, int y){
 	cout<<"Key pressed: "<<key<<endl;
 	cout<<"Point: ("<<x<<", "<<y<<")"<<endl;
-	transformacoes[0] += 0.1;
-	//transformacoes[3] += 0.1;
-	proxy->setUniformMatrix2fv("transformacoes", transformacoes);	
+	//TODO SE O CLICK FOR DENTRO DO OBJETO, MUDAR A COR DELE.
 	glutPostRedisplay();
 }
 
