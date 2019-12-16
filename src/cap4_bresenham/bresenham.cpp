@@ -12,7 +12,6 @@ const int MY = height - 1;
 
 char screen[1024][1024];
 
-
 void initialize() {
 	for (int i = 0; i < width; i ++ ){
 		for (int j = 0; j < height; j ++) {
@@ -40,15 +39,7 @@ int toYScr(float y, float minYSRU, float maxYSRU) {
 	return (int)( MY * (y-minYSRU)/(maxYSRU-minYSRU) + 0.5f);
 }
 
-float toXSRU(int x, float minXSRU, float maxXSRU) {
-	float amp = maxXSRU - minXSRU;
-	return  amp * x/width + minXSRU;
-}
 
-float toYSRU(int y, float minYSRU, float maxYSRU) {
-	float amp = maxYSRU - minYSRU;
-	return  -(amp * y/height + minYSRU);
-}
 //FIM DAS FUNCOES DE MAPEAMENTO ENTRE COORDENADAS DO UNIVERSO E COORDENADAS DA TELA
 
 void __bresenham(float x1, float y1, float x2, float y2, bool inv1 = false){
@@ -80,7 +71,7 @@ void __bresenham(float x1, float y1, float x2, float y2, bool inv1 = false){
 
 
 int main(int argc, char *argv[]) {
-	//show();
+	initialize();
 	__bresenham(-10, -10, 10, 10);
 	for (int i = 10; i>=-10; i--){
 		__bresenham(9, i, 10, i);
