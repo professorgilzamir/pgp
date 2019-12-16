@@ -186,3 +186,27 @@ int main(int argc, char* argv[])
   finalizar();
   return EXIT_SUCCESS;
 }
+
+/*
+void bresenham(float x1, float y1, float x2, float y2){
+	float dx = x2 - x1;
+	float dy = y2 - y1;
+	if (abs(dx) >= abs(dy)) {
+		if (dy > 0) {
+			if (dx > 0)
+				__bresenham(x1, y1, x2, y2);
+			else if (dx < 0) {
+				__bresenham(x2, y1, x1, y2);		
+			}
+		} else {
+			if (dx > 0)
+				__bresenham(x1, y2, x2, y1);
+			else if (dx < 0) {
+				__bresenham(x2, y2, x1, y1);		
+			}
+		}
+	} else if (abs(dy) >= abs(dx)) {
+		__bresenham(y1, x1, y2, x2, true);
+	} 
+}
+/*
